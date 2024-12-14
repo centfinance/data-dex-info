@@ -4,7 +4,7 @@ import { ExtraSmallOnly, HideExtraSmall, TYPE } from 'theme'
 import { DarkGreyCard } from 'components/Card'
 import { TokenData } from '../../state/tokens/reducer'
 import Loader, { LoadingRows } from 'components/Loader'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { AutoColumn } from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
 import { RowFixed } from 'components/Row'
@@ -70,8 +70,12 @@ const ResponsiveLogo = styled(CurrencyLogo)`
 
 const DataRow = ({ tokenData, index }: { tokenData: TokenData; index: number }) => {
   const theme = useTheme()
+  const location = useLocation()
+  const pathParts = location.pathname.split('/')
+  const basePath = pathParts.includes('tokens') ? location.pathname.replace(/\/tokens$/, '') : location.pathname
+
   return (
-    <LinkWrapper to={'tokens/' + tokenData.address}>
+    <LinkWrapper to={`${basePath.endsWith('/') ? basePath : basePath + '/'}tokens/${tokenData.address}`}>
       <ResponsiveGrid>
         <Label>{index + 1}</Label>
         <Label>
