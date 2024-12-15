@@ -47,8 +47,8 @@ const TopBar = () => {
           </RowFixed>
         </AutoRow>
         <AutoRow $gap="6px" style={{ justifyContent: 'flex-end' }}>
-          <StyledLink href="https://docs.vana.org/">Docs</StyledLink>
-          <StyledLink href="https://datadex.netlify.app">App</StyledLink>
+          <StyledLink href="https://docs.datadex.me/">Docs</StyledLink>
+          <StyledLink href="https://datadex.me">App</StyledLink>
         </AutoRow>
       </RowBetween>
     </Wrapper>

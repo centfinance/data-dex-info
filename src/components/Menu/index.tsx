@@ -101,7 +101,7 @@ export default function Menu() {
             <Info size={14} />
             About
           </MenuItem>
-          <MenuItem id="link" href="https://docs.vana.org/">
+          <MenuItem id="link" href="https://docs.datadex.me/">
             <BookOpen size={14} />
             Docs
           </MenuItem>
