@@ -31,6 +31,8 @@ export function useTVLOffset() {
     }, 0)
   }, [data])
 
+  console.log('tvlOffset', tvlOffset)
+
   return tvlOffset
 }
 

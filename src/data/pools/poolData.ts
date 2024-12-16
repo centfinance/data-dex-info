@@ -148,7 +148,7 @@ export function usePoolDatas(poolAddresses: string[]): {
     }
   }
 
-  const ethPriceUSD = data?.bundles?.[0]?.ethPriceUSD ? parseFloat(data?.bundles?.[0]?.ethPriceUSD) : 0
+  // const ethPriceUSD = data?.bundles?.[0]?.ethPriceUSD ? parseFloat(data?.bundles?.[0]?.ethPriceUSD) : 0
 
   const parsed = data?.pools
     ? data.pools.reduce((accum: { [address: string]: PoolFields }, poolData) => {
@@ -207,7 +207,8 @@ export function usePoolDatas(poolAddresses: string[]): {
     const tvlAdjust1 = current?.volumeToken1 ? (parseFloat(current.volumeToken1) * feePercent) / 2 : 0
     const tvlToken0 = current ? parseFloat(current.totalValueLockedToken0) - tvlAdjust0 : 0
     const tvlToken1 = current ? parseFloat(current.totalValueLockedToken1) - tvlAdjust1 : 0
-    let tvlUSD = current ? parseFloat(current.totalValueLockedUSD) : 0
+    const tvlUSD = current ? parseFloat(current.totalValueLockedUSD) : 0
+    console.log('tvlUSD', tvlUSD)
 
     const tvlUSDChange =
       current && oneDay
@@ -216,14 +217,15 @@ export function usePoolDatas(poolAddresses: string[]): {
           100
         : 0
 
-    // Part of TVL fix
-    const tvlUpdated = current
-      ? tvlToken0 * parseFloat(current.token0.derivedETH) * ethPriceUSD +
-        tvlToken1 * parseFloat(current.token1.derivedETH) * ethPriceUSD
-      : undefined
-    if (tvlUpdated) {
-      tvlUSD = tvlUpdated
-    }
+    // // Part of TVL fix
+    // const tvlUpdated = current
+    //   ? tvlToken0 * parseFloat(current.token0.derivedETH) * ethPriceUSD +
+    //     tvlToken1 * parseFloat(current.token1.derivedETH) * ethPriceUSD
+    //   : undefined
+    // if (tvlUpdated) {
+    //   tvlUSD = tvlUpdated
+    // }
+    // console.log('tvlUSD2', tvlUSD)
 
     const feeTier = current ? parseInt(current.feeTier) : 0
 

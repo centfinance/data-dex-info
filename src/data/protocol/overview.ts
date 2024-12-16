@@ -54,6 +54,7 @@ export function useFetchProtocolData(
 
   // fetch all data
   const { loading, error, data } = useQuery<GlobalResponse>(GLOBAL_DATA(), { client: activeDataClient })
+  console.log('data', data)
 
   const {
     loading: loading24,

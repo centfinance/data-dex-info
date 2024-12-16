@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.5bd2d841.css",
-    "main.js": "./static/js/main.f9ae884b.js",
+    "main.js": "./static/js/main.b8d061bc.js",
     "static/media/Inter.var.woff2": "./static/media/Inter.var.a738a131ff730bb906e6.woff2",
     "static/media/vana-logo-white.svg": "./static/media/vana-logo-white.41865ec38a285a04fa396d3b898b7abb.svg",
     "static/media/Inter-italic.var.woff2": "./static/media/Inter-italic.var.e2e12d2e9288439ecb06.woff2",
@@ -54,10 +54,10 @@
     "static/media/celo-logo.svg": "./static/media/celo-logo.e95fad7be41e27771a1729f111f11ec9.svg",
     "static/media/base-logo.svg": "./static/media/base-logo.15508bb9fe67ed9cd096c8a47c108702.svg",
     "main.5bd2d841.css.map": "./static/css/main.5bd2d841.css.map",
-    "main.f9ae884b.js.map": "./static/js/main.f9ae884b.js.map"
+    "main.b8d061bc.js.map": "./static/js/main.b8d061bc.js.map"
   },
   "entrypoints": [
     "static/css/main.5bd2d841.css",
-    "static/js/main.f9ae884b.js"
+    "static/js/main.b8d061bc.js"
   ]
 }
