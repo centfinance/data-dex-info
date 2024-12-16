@@ -32,6 +32,8 @@ export const TOKEN_HIDE: { [key: string]: string[] } = {
     '0xcea086a4a08ece04bd060c7c0ab67033b7adc088', //tVANA
     '0xc7623faa9e41daaf854f07b5b45e70cf1d68583e', //tUSDT
     '0x1fe0ebd7b53fc434ea0a69074406503f9ab0e2fc', //tUSDC
+    '0x997772505266ea0089d4877cfb381e008e5c55b6',
+    '0xdab91c6f75dd29cf4637fb6319afc1f1bc74af1b',
   ],
   [SupportedNetwork.VANA_MOKSHA]: [],
 }
@@ -58,6 +60,8 @@ export const POOL_HIDE: { [key: string]: string[] } = {
     '0xcae4cf523391d96c6c4626de9bee64a1fb9e09ac', //tUSDC-tUSDT
     '0xfb864d98b37a0a22b23b20489a86ada5fe9ed97b', //tVANA-USDC.e
     '0x17e2602541f653a3ef10b17bbe62a209fbef11c5', //WVANA-tUSDC
+    '0xd1ac880364c136f31ec12b7b430d536cf52f33ac',
+    '0x0fad3e65482d83665baec23914aad5b967d8a509',
   ],
   [SupportedNetwork.VANA_MOKSHA]: [],
 }
