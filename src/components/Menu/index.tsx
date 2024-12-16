@@ -97,7 +97,7 @@ export default function Menu() {
 
       {isOpen && (
         <MenuFlyout>
-          <MenuItem id="link" href="https://datadex.me/">
+          <MenuItem id="link" href="https://datadex.com/">
             <Info size={14} />
             About
           </MenuItem>
