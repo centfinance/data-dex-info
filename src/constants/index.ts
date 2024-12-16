@@ -28,7 +28,11 @@ export const TOKEN_HIDE: { [key: string]: string[] } = {
   [SupportedNetwork.BNB]: [],
   [SupportedNetwork.AVALANCHE]: [],
   [SupportedNetwork.BASE]: [],
-  [SupportedNetwork.VANA]: [],
+  [SupportedNetwork.VANA]: [
+    '0xcea086a4a08ece04bd060c7c0ab67033b7adc088', //tVANA
+    '0xc7623faa9e41daaf854f07b5b45e70cf1d68583e', //tUSDT
+    '0x1fe0ebd7b53fc434ea0a69074406503f9ab0e2fc', //tUSDC
+  ],
   [SupportedNetwork.VANA_MOKSHA]: [],
 }
 
@@ -49,7 +53,12 @@ export const POOL_HIDE: { [key: string]: string[] } = {
   [SupportedNetwork.BNB]: [],
   [SupportedNetwork.AVALANCHE]: [],
   [SupportedNetwork.BASE]: [],
-  [SupportedNetwork.VANA]: [],
+  [SupportedNetwork.VANA]: [
+    '0xeee97e1c64d4c733eddc476bca7166f042628613', //tVANA-tUSDC
+    '0xcae4cf523391d96c6c4626de9bee64a1fb9e09ac', //tUSDC-tUSDT
+    '0xfb864d98b37a0a22b23b20489a86ada5fe9ed97b', //tVANA-USDC.e
+    '0x17e2602541f653a3ef10b17bbe62a209fbef11c5', //WVANA-tUSDC
+  ],
   [SupportedNetwork.VANA_MOKSHA]: [],
 }
 
