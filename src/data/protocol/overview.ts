@@ -6,7 +6,7 @@ import { useDeltaTimestamps } from 'utils/queries'
 import { useBlocksFromTimestamps } from 'hooks/useBlocksFromTimestamps'
 import { useMemo } from 'react'
 import { useClients } from 'state/application/hooks'
-import { useTVLOffset } from './derived'
+import { useTVLAllowed, useTVLOffset } from './derived'
 
 export const GLOBAL_DATA = (block?: string) => {
   const queryString = ` query uniswapFactories {
@@ -47,6 +47,8 @@ export function useFetchProtocolData(
   // Aggregate TVL in inaccurate pools. Offset Uniswap aggregate TVL by this amount.
   const tvlOffset = useTVLOffset()
 
+  const allowedTVL = useTVLAllowed()
+
   // get blocks from historic timestamps
   const [t24, t48] = useDeltaTimestamps()
   const { blocks, error: blockError } = useBlocksFromTimestamps([t24, t48], activeBlockClient)
@@ -54,7 +56,6 @@ export function useFetchProtocolData(
 
   // fetch all data
   const { loading, error, data } = useQuery<GlobalResponse>(GLOBAL_DATA(), { client: activeDataClient })
-  console.log('data', data)
 
   const {
     loading: loading24,
@@ -121,14 +122,14 @@ export function useFetchProtocolData(
     return {
       volumeUSD,
       volumeUSDChange: typeof volumeUSDChange === 'number' ? volumeUSDChange : 0,
-      tvlUSD: parseFloat(parsed?.totalValueLockedUSD) - tvlOffset,
+      tvlUSD: allowedTVL ?? 0, // parseFloat(parsed?.totalValueLockedUSD) - tvlOffset,
       tvlUSDChange,
       feesUSD,
       feeChange,
       txCount,
       txCountChange,
     }
-  }, [anyError, anyLoading, blocks, parsed, parsed24, parsed48, tvlOffset])
+  }, [anyError, anyLoading, blocks, parsed, parsed24, parsed48, tvlOffset, allowedTVL])
   return {
     loading: anyLoading,
     error: anyError,

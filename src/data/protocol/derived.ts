@@ -36,6 +36,23 @@ export function useTVLOffset() {
   return tvlOffset
 }
 
+export function useTVLAllowed() {
+  const [currentNetwork] = useActiveNetworkVersion()
+  const { data } = usePoolDatas(POOL_ALLOW_LIST[currentNetwork.id])
+
+  const allowedTVL = useMemo(() => {
+    if (!data) return undefined
+    return Object.keys(data).reduce((accum: number, poolAddress) => {
+      const poolData: PoolData = data[poolAddress]
+      return accum + poolData.tvlUSD
+    }, 0)
+  }, [data])
+
+  console.log('allowedTVL', allowedTVL)
+
+  return allowedTVL
+}
+
 /**
  * Fecthes and formats data for pools that result in incorrect USD TVL.
  *
