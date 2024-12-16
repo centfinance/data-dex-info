@@ -34,8 +34,39 @@ export const TOKEN_HIDE: { [key: string]: string[] } = {
     '0x1fe0ebd7b53fc434ea0a69074406503f9ab0e2fc', //tUSDC
     '0x997772505266ea0089d4877cfb381e008e5c55b6',
     '0xdab91c6f75dd29cf4637fb6319afc1f1bc74af1b',
+    '0xbd2d7c728b224961fdb25ccf2a67eb3c25f5ec52',
   ],
   [SupportedNetwork.VANA_MOKSHA]: [],
+}
+
+export const TOKEN_ALLOW_LIST: { [key: string]: string[] } = {
+  [SupportedNetwork.ETHEREUM]: [],
+  [SupportedNetwork.POLYGON]: [],
+  [SupportedNetwork.ARBITRUM]: [],
+  [SupportedNetwork.OPTIMISM]: [],
+  [SupportedNetwork.CELO]: [],
+  [SupportedNetwork.BNB]: [],
+  [SupportedNetwork.AVALANCHE]: [],
+  [SupportedNetwork.BASE]: [],
+  [SupportedNetwork.VANA]: [
+    '0xf1815bd50389c46847f0bda824ec8da914045d14', //USDC.e
+    '0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590', //WETH
+    '0x00eddd9621fb08436d0331c149d1690909a5906d', //WVANA
+    '0xf23e379b2fd945f8c0a4f410cb6ef9398bf022d6', //KLEO (KDAT)
+    '0x84f8dc1ada73298281387e62616470f3dd5df2f6', //SIXGPT (SIX)
+    '0x0cc1bc0131dd9782e65ca0319cd3a60eba3a932d', //DFUSION (VFSN)
+    '0xeb68ef0550a5532447da0fea4f0ed9f804803b8b', //VOLARA (VOL)
+    '0x1becf440e8bcfc78cdfd45f29f7b1dc04df7777c', //Finquarium (FIN)
+    '0xf8f97a79a3fa77104fab4814e3ed93899777de0d', //Datapig (GDP)
+  ],
+  [SupportedNetwork.VANA_MOKSHA]: [
+    '0xb39a50b5806039c82932bb96cefbcbc61231045c', // USDC
+    '0x01079c78199e05d44bbff9e50dbdf765489f16e1', // USDT
+    '0xbccc4b4c6530f82fe309c5e845e50b5e9c89f2ad', // VANA
+    '0xb18a68588e4551b880011af27df5347b99b444c2', // VOLARA
+    '0xf5a960f8f0d04aaedc44f2619977a2b7de9cef09', // DNA
+    '0xf379a80f0585e57fd5aebb29d8cafac60f8f54c3', // WDUDE
+  ],
 }
 
 export const POOL_HIDE: { [key: string]: string[] } = {
@@ -62,7 +93,21 @@ export const POOL_HIDE: { [key: string]: string[] } = {
     '0x17e2602541f653a3ef10b17bbe62a209fbef11c5', //WVANA-tUSDC
     '0xd1ac880364c136f31ec12b7b430d536cf52f33ac',
     '0x0fad3e65482d83665baec23914aad5b967d8a509',
+    '0x2aea543b0931f088e939d27937c648a8767587c5',
   ],
+  [SupportedNetwork.VANA_MOKSHA]: [],
+}
+
+export const POOL_ALLOW_LIST: { [key: string]: string[] } = {
+  [SupportedNetwork.ETHEREUM]: [],
+  [SupportedNetwork.POLYGON]: [],
+  [SupportedNetwork.ARBITRUM]: [],
+  [SupportedNetwork.OPTIMISM]: [],
+  [SupportedNetwork.CELO]: [],
+  [SupportedNetwork.BNB]: [],
+  [SupportedNetwork.AVALANCHE]: [],
+  [SupportedNetwork.BASE]: [],
+  [SupportedNetwork.VANA]: ['0x850e454ddebf9f61ef5a86a032c857e0e47c4fa9', '0xe21b165bcd93251b71db4a55e4e8f234b3391d74'],
   [SupportedNetwork.VANA_MOKSHA]: [],
 }
 

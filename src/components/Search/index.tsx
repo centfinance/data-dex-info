@@ -15,7 +15,7 @@ import { SavedIcon } from 'components/Button'
 import { useTokenDatas } from 'state/tokens/hooks'
 import { usePoolDatas } from 'state/pools/hooks'
 import HoverInlineText from 'components/HoverInlineText'
-import { TOKEN_HIDE, POOL_HIDE } from '../../constants/index'
+import { POOL_ALLOW_LIST, TOKEN_ALLOW_LIST } from '../../constants/index'
 import { useActiveNetworkVersion } from 'state/application/hooks'
 import { networkPrefix } from 'utils/networkPrefix'
 import { useNavigate } from 'react-router-dom'
@@ -280,7 +280,7 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
               </HideSmall>
             </ResponsiveGrid>
             {tokensForList
-              .filter((t) => !TOKEN_HIDE[activeNetwork.id].includes(t.address))
+              .filter((t) => TOKEN_ALLOW_LIST[activeNetwork.id].includes(t.address))
               .slice(0, tokensShown)
               .map((t, i) => {
                 return (
@@ -347,7 +347,7 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
               </HideSmall>
             </ResponsiveGrid>
             {poolForList
-              .filter((p) => !POOL_HIDE[activeNetwork.id].includes(p.address))
+              .filter((p) => POOL_ALLOW_LIST[activeNetwork.id].includes(p.address))
               .slice(0, poolsShown)
               .map((p, i) => {
                 return (

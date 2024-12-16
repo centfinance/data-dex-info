@@ -17,6 +17,11 @@ export default function Updater(): null {
   const lists = useAllLists()
   const activeListUrls = useActiveListUrls()
 
+  // Move the dispatch into useEffect
+  useEffect(() => {
+    dispatch(enableList(OPTIMISM_LIST))
+  }, [dispatch]) // Only run once when component mounts
+
   const fetchList = useFetchListCallback()
   const fetchAllListsCallback = useCallback(() => {
     if (!isWindowVisible) return
@@ -24,8 +29,6 @@ export default function Updater(): null {
       fetchList(url).catch((error) => console.debug('interval list fetching error', error)),
     )
   }, [fetchList, isWindowVisible, lists])
-
-  dispatch(enableList(OPTIMISM_LIST))
 
   // fetch all lists every 10 minutes, but only after we initialize library
   useInterval(fetchAllListsCallback, 1000 * 60 * 10)

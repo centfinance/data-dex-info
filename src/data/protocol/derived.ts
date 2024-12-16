@@ -9,7 +9,7 @@ import { useActiveNetworkVersion, useDataClient } from 'state/application/hooks'
 import { updatePoolChartData } from 'state/pools/actions'
 import { PoolChartEntry, PoolData } from 'state/pools/reducer'
 import { ChartDayData } from 'types'
-import { POOL_HIDE } from '../../constants'
+import { POOL_HIDE, POOL_ALLOW_LIST } from '../../constants'
 
 /**
  * Calculates offset amount to avoid inaccurate USD data for global TVL.
@@ -19,10 +19,13 @@ export function useTVLOffset() {
   const [currentNetwork] = useActiveNetworkVersion()
   const { data } = usePoolDatas(POOL_HIDE[currentNetwork.id])
 
+  console.log('data', data)
+
   const tvlOffset = useMemo(() => {
     if (!data) return undefined
 
     return Object.keys(data).reduce((accum: number, poolAddress) => {
+      console.log('accum', accum)
       const poolData: PoolData = data[poolAddress]
       return accum + poolData.tvlUSD
     }, 0)
@@ -111,7 +114,7 @@ export function useDerivedProtocolTVLHistory() {
         .reduce(
           async (accumP: Promise<{ [key: number]: ChartDayData }>, address) => {
             const accum = await accumP
-            if (POOL_HIDE[currentNetwork.id].includes(address)) {
+            if (!POOL_ALLOW_LIST[currentNetwork.id].includes(address)) {
               return accum
             }
             const { data } = await fetchPoolChartData(address, dataClient)

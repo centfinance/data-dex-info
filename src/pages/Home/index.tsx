@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import { AutoColumn } from 'components/Column'
 import { TYPE } from 'theme'
@@ -125,6 +125,29 @@ export default function Home() {
     return formatDollarAmount(protocolData?.tvlUSD, 2, true)
   }, [liquidityHover, protocolData?.tvlUSD])
 
+  const volumeHoverRef = useRef<number | undefined>()
+  const liquidityHoverRef = useRef<number | undefined>()
+  const leftLabelRef = useRef<string | undefined>()
+  const rightLabelRef = useRef<string | undefined>()
+
+  useEffect(() => {
+    if (volumeHoverRef.current !== volumeHover) {
+      setVolumeHover(volumeHoverRef.current)
+    }
+    if (rightLabelRef.current !== rightLabel) {
+      setRightLabel(rightLabelRef.current)
+    }
+  }, [volumeHoverRef.current, rightLabelRef.current])
+
+  useEffect(() => {
+    if (liquidityHoverRef.current !== liquidityHover) {
+      setLiquidityHover(liquidityHoverRef.current)
+    }
+    if (leftLabelRef.current !== leftLabel) {
+      setLeftLabel(leftLabelRef.current)
+    }
+  }, [liquidityHoverRef.current, leftLabelRef.current])
+
   return (
     <Trace page={'home-page'} shouldLogImpression>
       <PageWrapper>
@@ -140,8 +163,26 @@ export default function Home() {
                 color={activeNetwork.primaryColor}
                 value={liquidityHover}
                 label={leftLabel}
-                setValue={setLiquidityHover}
-                setLabel={setLeftLabel}
+                setValue={useCallback(
+                  (val: React.SetStateAction<number | undefined>) => {
+                    if (typeof val === 'function') {
+                      liquidityHoverRef.current = val(liquidityHover)
+                    } else {
+                      liquidityHoverRef.current = val
+                    }
+                  },
+                  [liquidityHover],
+                )}
+                setLabel={useCallback(
+                  (val: React.SetStateAction<string | undefined>) => {
+                    if (typeof val === 'function') {
+                      leftLabelRef.current = val(leftLabel)
+                    } else {
+                      leftLabelRef.current = val
+                    }
+                  },
+                  [leftLabel],
+                )}
                 topLeft={
                   <AutoColumn $gap="4px">
                     <TYPE.mediumHeader fontSize="16px">TVL</TYPE.mediumHeader>
@@ -167,8 +208,26 @@ export default function Home() {
                     : formattedVolumeData
                 }
                 color={theme?.blue1}
-                setValue={setVolumeHover}
-                setLabel={setRightLabel}
+                setValue={useCallback(
+                  (val: React.SetStateAction<number | undefined>) => {
+                    if (typeof val === 'function') {
+                      volumeHoverRef.current = val(volumeHover)
+                    } else {
+                      volumeHoverRef.current = val
+                    }
+                  },
+                  [volumeHover],
+                )}
+                setLabel={useCallback(
+                  (val: React.SetStateAction<string | undefined>) => {
+                    if (typeof val === 'function') {
+                      rightLabelRef.current = val(rightLabel)
+                    } else {
+                      rightLabelRef.current = val
+                    }
+                  },
+                  [rightLabel],
+                )}
                 value={volumeHover}
                 label={rightLabel}
                 activeWindow={volumeWindow}
