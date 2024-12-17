@@ -20,6 +20,7 @@ import { notEmpty } from 'utils'
 import dayjs, { OpUnitType } from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useActiveNetworkVersion, useClients } from 'state/application/hooks'
+import { POOL_ALLOW_LIST, TOKEN_ALLOW_LIST } from '../../constants/index'
 // format dayjs with the libraries that we need
 dayjs.extend(utc)
 
@@ -27,7 +28,20 @@ export function useAllTokenData(): {
   [address: string]: { data: TokenData | undefined; lastUpdated: number | undefined }
 } {
   const [activeNetwork] = useActiveNetworkVersion()
-  return useSelector((state: AppState) => state.tokens.byAddress[activeNetwork.id] ?? {})
+  const allTokens = useSelector((state: AppState) => state.tokens.byAddress[activeNetwork.id] ?? {})
+
+  // Filter tokens based on TOKEN_ALLOW_LIST
+  return useMemo(() => {
+    const filteredTokens: { [address: string]: { data: TokenData | undefined; lastUpdated: number | undefined } } = {}
+
+    Object.keys(allTokens).forEach((address) => {
+      if (TOKEN_ALLOW_LIST[activeNetwork.id]?.includes(address)) {
+        filteredTokens[address] = allTokens[address]
+      }
+    })
+
+    return filteredTokens
+  }, [allTokens, activeNetwork.id])
 }
 
 export function useUpdateTokenData(): (tokens: TokenData[]) => void {
@@ -104,6 +118,7 @@ export function usePoolsForToken(address: string): string[] | undefined {
   const [activeNetwork] = useActiveNetworkVersion()
   const token = useSelector((state: AppState) => state.tokens.byAddress[activeNetwork.id]?.[address])
   const poolsForToken = token.poolAddresses
+
   const [error, setError] = useState(false)
   const { dataClient } = useClients()
 
@@ -111,7 +126,15 @@ export function usePoolsForToken(address: string): string[] | undefined {
     async function fetch() {
       const { loading, error, addresses } = await fetchPoolsForToken(address, dataClient)
       if (!loading && !error && addresses) {
-        dispatch(addPoolAddresses({ tokenAddress: address, poolAddresses: addresses, networkId: activeNetwork.id }))
+        // Filter addresses to only include those in POOL_ALLOW_LIST
+        const filteredAddresses = addresses.filter((address) => POOL_ALLOW_LIST[activeNetwork.id]?.includes(address))
+        dispatch(
+          addPoolAddresses({
+            tokenAddress: address,
+            poolAddresses: filteredAddresses,
+            networkId: activeNetwork.id,
+          }),
+        )
       }
       if (error) {
         setError(error)
@@ -122,8 +145,8 @@ export function usePoolsForToken(address: string): string[] | undefined {
     }
   }, [address, dispatch, error, poolsForToken, dataClient, activeNetwork.id])
 
-  // return data
-  return poolsForToken
+  // Filter returned pools just in case stored data includes non-allowed pools
+  return poolsForToken?.filter((address) => POOL_ALLOW_LIST[activeNetwork.id]?.includes(address))
 }
 
 /**

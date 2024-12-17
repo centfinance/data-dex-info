@@ -1,6 +1,6 @@
 import { addPoolKeys, updatePoolChartData, updatePoolTransactions, updateTickData } from 'state/pools/actions'
 import { AppState, AppDispatch } from './../index'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { PoolData, PoolChartEntry } from './reducer'
 import { updatePoolData } from './actions'
@@ -10,12 +10,26 @@ import { Transaction } from 'types'
 import { fetchPoolTransactions } from 'data/pools/transactions'
 import { PoolTickData } from 'data/pools/tickData'
 import { useActiveNetworkVersion, useClients } from 'state/application/hooks'
+import { POOL_ALLOW_LIST } from '../../constants/index'
 
 export function useAllPoolData(): {
   [address: string]: { data: PoolData | undefined; lastUpdated: number | undefined }
 } {
   const [network] = useActiveNetworkVersion()
-  return useSelector((state: AppState) => state.pools.byAddress[network.id] ?? {})
+  const allPools = useSelector((state: AppState) => state.pools.byAddress[network.id] ?? {})
+
+  // Filter pools based on POOL_ALLOW_LIST
+  return useMemo(() => {
+    const filteredPools: { [address: string]: { data: PoolData | undefined; lastUpdated: number | undefined } } = {}
+
+    Object.keys(allPools).forEach((address) => {
+      if (POOL_ALLOW_LIST[network.id]?.includes(address)) {
+        filteredPools[address] = allPools[address]
+      }
+    })
+
+    return filteredPools
+  }, [allPools, network.id])
 }
 
 export function useUpdatePoolData(): (pools: PoolData[]) => void {
