@@ -110,6 +110,7 @@ export const POOL_ALLOW_LIST: { [key: string]: string[] } = {
   [SupportedNetwork.VANA]: [
     '0x850e454ddebf9f61ef5a86a032c857e0e47c4fa9',
     '0xe21b165bcd93251b71db4a55e4e8f234b3391d74',
+    '0x39b01BcfB9C2B3B7cA88d298E84b67D5300243E3', //WETH-USDC.e
     '0x443d994a345c95df081c3cc45320d8b099b9f50c', //KLEO (KDAT)
     '0x2c856dc8aae173be498471b948ea4eea1702afed', //SIXGPT (SIX)
     '0x710344a5c8d60959efde9da3e359b1a87872a766', //DFUSION (VFSN)

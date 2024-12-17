@@ -10,6 +10,7 @@ import { TYPE, StyledInternalLink } from 'theme'
 import { formatDollarAmount } from 'utils/numbers'
 import Percent from 'components/Percent'
 import HoverInlineText from 'components/HoverInlineText'
+import { useLocation } from 'react-router-dom'
 
 const CardWrapper = styled(StyledInternalLink)`
   min-width: 190px;
@@ -36,8 +37,12 @@ export const ScrollableRow = styled.div`
 `
 
 const DataCard = ({ tokenData }: { tokenData: TokenData }) => {
+  const location = useLocation()
+  const pathParts = location.pathname.split('/')
+  const basePath = pathParts.includes('tokens') ? location.pathname.replace(/\/tokens$/, '') : location.pathname
+
   return (
-    <CardWrapper to={'tokens/' + tokenData.address}>
+    <CardWrapper to={`${basePath.endsWith('/') ? basePath : basePath + '/'}tokens/${tokenData.address}`}>
       <GreyCard padding="16px">
         <RowFixed>
           <CurrencyLogo address={tokenData.address} size="32px" />
