@@ -2,14 +2,16 @@ import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
 import gql from 'graphql-tag'
 import { Transaction, TransactionType } from 'types'
 import { formatTokenSymbol } from 'utils/tokens'
+import { POOL_ALLOW_LIST } from '../../constants'
+import { SupportedNetwork } from 'constants/networks'
 
 const GLOBAL_TRANSACTIONS = gql`
-  query transactions($address: Bytes!) {
+  query transactions($address: Bytes!, $poolAddresses: [String]!) {
     mintsAs0: mints(
       first: 500
       orderBy: timestamp
       orderDirection: desc
-      where: { token0: $address }
+      where: { token0: $address, pool_in: $poolAddresses }
       subgraphError: allow
     ) {
       timestamp
@@ -17,6 +19,7 @@ const GLOBAL_TRANSACTIONS = gql`
         id
       }
       pool {
+        id
         token0 {
           id
           symbol
@@ -37,7 +40,7 @@ const GLOBAL_TRANSACTIONS = gql`
       first: 500
       orderBy: timestamp
       orderDirection: desc
-      where: { token0: $address }
+      where: { token1: $address, pool_in: $poolAddresses }
       subgraphError: allow
     ) {
       timestamp
@@ -45,6 +48,7 @@ const GLOBAL_TRANSACTIONS = gql`
         id
       }
       pool {
+        id
         token0 {
           id
           symbol
@@ -65,7 +69,7 @@ const GLOBAL_TRANSACTIONS = gql`
       first: 500
       orderBy: timestamp
       orderDirection: desc
-      where: { token0: $address }
+      where: { token0: $address, pool_in: $poolAddresses }
       subgraphError: allow
     ) {
       timestamp
@@ -73,6 +77,7 @@ const GLOBAL_TRANSACTIONS = gql`
         id
       }
       pool {
+        id
         token0 {
           id
           symbol
@@ -91,7 +96,7 @@ const GLOBAL_TRANSACTIONS = gql`
       first: 500
       orderBy: timestamp
       orderDirection: desc
-      where: { token1: $address }
+      where: { token1: $address, pool_in: $poolAddresses }
       subgraphError: allow
     ) {
       timestamp
@@ -99,6 +104,7 @@ const GLOBAL_TRANSACTIONS = gql`
         id
       }
       pool {
+        id
         token0 {
           id
           symbol
@@ -117,7 +123,7 @@ const GLOBAL_TRANSACTIONS = gql`
       first: 500
       orderBy: timestamp
       orderDirection: desc
-      where: { token0: $address }
+      where: { token0: $address, pool_in: $poolAddresses }
       subgraphError: allow
     ) {
       timestamp
@@ -125,6 +131,7 @@ const GLOBAL_TRANSACTIONS = gql`
         id
       }
       pool {
+        id
         token0 {
           id
           symbol
@@ -143,7 +150,7 @@ const GLOBAL_TRANSACTIONS = gql`
       first: 500
       orderBy: timestamp
       orderDirection: desc
-      where: { token1: $address }
+      where: { token1: $address, pool_in: $poolAddresses }
       subgraphError: allow
     ) {
       timestamp
@@ -151,6 +158,7 @@ const GLOBAL_TRANSACTIONS = gql`
         id
       }
       pool {
+        id
         token0 {
           id
           symbol
@@ -175,6 +183,7 @@ interface TransactionResults {
       id: string
     }
     pool: {
+      id: string
       token0: {
         id: string
         symbol: string
@@ -184,6 +193,8 @@ interface TransactionResults {
         symbol: string
       }
     }
+    owner: string
+    sender: string
     origin: string
     amount0: string
     amount1: string
@@ -195,6 +206,7 @@ interface TransactionResults {
       id: string
     }
     pool: {
+      id: string
       token0: {
         id: string
         symbol: string
@@ -204,6 +216,8 @@ interface TransactionResults {
         symbol: string
       }
     }
+    owner: string
+    sender: string
     origin: string
     amount0: string
     amount1: string
@@ -215,6 +229,7 @@ interface TransactionResults {
       id: string
     }
     pool: {
+      id: string
       token0: {
         id: string
         symbol: string
@@ -235,6 +250,7 @@ interface TransactionResults {
       id: string
     }
     pool: {
+      id: string
       token0: {
         id: string
         symbol: string
@@ -255,6 +271,7 @@ interface TransactionResults {
       id: string
     }
     pool: {
+      id: string
       token0: {
         id: string
         symbol: string
@@ -275,6 +292,7 @@ interface TransactionResults {
       id: string
     }
     pool: {
+      id: string
       token0: {
         id: string
         symbol: string
@@ -294,12 +312,24 @@ interface TransactionResults {
 export async function fetchTokenTransactions(
   address: string,
   client: ApolloClient<NormalizedCacheObject>,
+  networkId: SupportedNetwork,
 ): Promise<{ data: Transaction[] | undefined; error: boolean; loading: boolean }> {
   try {
+    const allowedPools = POOL_ALLOW_LIST[networkId] ?? []
+
+    if (!allowedPools.length) {
+      return {
+        data: [],
+        error: false,
+        loading: false,
+      }
+    }
+
     const { data, error, loading } = await client.query<TransactionResults>({
       query: GLOBAL_TRANSACTIONS,
       variables: {
         address: address,
+        poolAddresses: allowedPools,
       },
       fetchPolicy: 'cache-first',
     })
@@ -415,7 +445,8 @@ export async function fetchTokenTransactions(
     })
 
     return { data: [...mints0, ...mints1, ...burns0, ...burns1, ...swaps0, ...swaps1], error: false, loading: false }
-  } catch {
+  } catch (err) {
+    console.error('Error in fetchTokenTransactions:', err)
     return {
       data: undefined,
       error: true,

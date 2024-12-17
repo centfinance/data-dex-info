@@ -13,12 +13,18 @@ export function useCMCLink(address: string): string | undefined {
 
   useEffect(() => {
     async function fetchLink() {
-      const result = await fetch(cmcEndpoint + address)
-      // if link exists, format the url
-      if (result.status === 200) {
-        result.json().then(({ data }) => {
-          setLink(data.url)
-        })
+      try {
+        const result = await fetch(cmcEndpoint + address)
+        // if link exists, format the url
+        if (result.status === 200) {
+          const json = await result.json()
+          if (json.data?.url) {
+            setLink(json.data.url)
+          }
+        }
+      } catch (error) {
+        // Silently fail - CMC link is non-critical functionality
+        console.debug('Failed to fetch CMC link:', error)
       }
     }
     if (address) {

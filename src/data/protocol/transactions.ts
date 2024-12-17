@@ -2,14 +2,29 @@ import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
 import gql from 'graphql-tag'
 import { Transaction, TransactionType } from 'types'
 import { formatTokenSymbol } from 'utils/tokens'
+import { POOL_ALLOW_LIST } from '../../constants'
+import { SupportedNetwork } from 'constants/networks'
 
-const GLOBAL_TRANSACTIONS = gql`
+const GLOBAL_TRANSACTIONS = (poolAddresses: string[]) => gql`
   query transactions {
-    transactions(first: 500, orderBy: timestamp, orderDirection: desc, subgraphError: allow) {
+    transactions(
+      first: 500, 
+      orderBy: timestamp, 
+      orderDirection: desc, 
+      where: { 
+        or: [
+          { mints_: { pool_in: ${JSON.stringify(poolAddresses)} } },
+          { burns_: { pool_in: ${JSON.stringify(poolAddresses)} } },
+          { swaps_: { pool_in: ${JSON.stringify(poolAddresses)} } }
+        ]
+      },
+      subgraphError: allow
+    ) {
       id
       timestamp
-      mints {
+      mints(where: { pool_in: ${JSON.stringify(poolAddresses)} }) {
         pool {
+          id
           token0 {
             id
             symbol
@@ -26,8 +41,9 @@ const GLOBAL_TRANSACTIONS = gql`
         amount1
         amountUSD
       }
-      swaps {
+      swaps(where: { pool_in: ${JSON.stringify(poolAddresses)} }) {
         pool {
+          id
           token0 {
             id
             symbol
@@ -42,8 +58,9 @@ const GLOBAL_TRANSACTIONS = gql`
         amount1
         amountUSD
       }
-      burns {
+      burns(where: { pool_in: ${JSON.stringify(poolAddresses)} }) {
         pool {
+          id
           token0 {
             id
             symbol
@@ -123,10 +140,17 @@ interface TransactionResults {
 
 export async function fetchTopTransactions(
   client: ApolloClient<NormalizedCacheObject>,
+  networkId: SupportedNetwork,
 ): Promise<Transaction[] | undefined> {
   try {
+    const allowedPools = POOL_ALLOW_LIST[networkId] ?? []
+
+    if (!allowedPools.length) {
+      return []
+    }
+
     const { data, error, loading } = await client.query<TransactionResults>({
-      query: GLOBAL_TRANSACTIONS,
+      query: GLOBAL_TRANSACTIONS(allowedPools),
       fetchPolicy: 'cache-first',
     })
 

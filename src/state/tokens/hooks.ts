@@ -258,13 +258,13 @@ export function useTokenTransactions(address: string): Transaction[] | undefined
   const dispatch = useDispatch<AppDispatch>()
   const [activeNetwork] = useActiveNetworkVersion()
   const token = useSelector((state: AppState) => state.tokens.byAddress[activeNetwork.id]?.[address])
-  const transactions = token.transactions
+  const transactions = token?.transactions
   const [error, setError] = useState(false)
   const { dataClient } = useClients()
 
   useEffect(() => {
     async function fetch() {
-      const { error, data } = await fetchTokenTransactions(address, dataClient)
+      const { error, data } = await fetchTokenTransactions(address, dataClient, activeNetwork.id)
       if (error) {
         setError(true)
       } else if (data) {
@@ -274,8 +274,7 @@ export function useTokenTransactions(address: string): Transaction[] | undefined
     if (!transactions && !error) {
       fetch()
     }
-  }, [activeNetwork.id, address, dataClient, dispatch, error, transactions])
+  }, [activeNetwork.id, address, dataClient, dispatch, error, transactions, token])
 
-  // return data
   return transactions
 }
