@@ -6,27 +6,36 @@ import { useDeltaTimestamps } from 'utils/queries'
 import { useBlocksFromTimestamps } from 'hooks/useBlocksFromTimestamps'
 import { useMemo } from 'react'
 import { useClients } from 'state/application/hooks'
-import { useTVLAllowed, useTVLOffset } from './derived'
+// import { useTVLAllowed, useTVLOffset } from './derived'
+import { POOL_ALLOW_LIST } from '../../constants'
+import { useActiveNetworkVersion } from 'state/application/hooks'
 
-export const GLOBAL_DATA = (block?: string) => {
-  const queryString = ` query uniswapFactories {
-      factories(
-       ${block !== undefined ? `block: { number: ${block}}` : ``} 
-       first: 1, subgraphError: allow) {
+// Modified query to fetch specific pools
+export const POOLS_DATA = (poolAddresses: string[], block?: string) => {
+  const queryString = `
+    query pools {
+      pools(
+        where: { id_in: ${JSON.stringify(poolAddresses)} }
+        ${block !== undefined ? `block: { number: ${block}}` : ``}
+        subgraphError: allow
+      ) {
+        id
         txCount
-        totalVolumeUSD
-        totalFeesUSD
+        volumeUSD
+        feesUSD
         totalValueLockedUSD
       }
-    }`
+    }
+  `
   return gql(queryString)
 }
 
-interface GlobalResponse {
-  factories: {
+interface PoolResponse {
+  pools: {
+    id: string
     txCount: string
-    totalVolumeUSD: string
-    totalFeesUSD: string
+    volumeUSD: string
+    feesUSD: string
     totalValueLockedUSD: string
   }[]
 }
@@ -39,97 +48,108 @@ export function useFetchProtocolData(
   error: boolean
   data: ProtocolData | undefined
 } {
-  // get appropriate clients if override needed
   const { dataClient, blockClient } = useClients()
   const activeDataClient = dataClientOverride ?? dataClient
   const activeBlockClient = blockClientOverride ?? blockClient
+  const [activeNetwork] = useActiveNetworkVersion()
 
-  // Aggregate TVL in inaccurate pools. Offset Uniswap aggregate TVL by this amount.
-  const tvlOffset = useTVLOffset()
-
-  const allowedTVL = useTVLAllowed()
+  // Get allowed pool addresses for current network
+  const allowedPools = POOL_ALLOW_LIST[activeNetwork.id] ?? []
 
   // get blocks from historic timestamps
   const [t24, t48] = useDeltaTimestamps()
   const { blocks, error: blockError } = useBlocksFromTimestamps([t24, t48], activeBlockClient)
   const [block24, block48] = blocks ?? []
 
-  // fetch all data
-  const { loading, error, data } = useQuery<GlobalResponse>(GLOBAL_DATA(), { client: activeDataClient })
+  // fetch all data for allowed pools
+  const { loading, error, data } = useQuery<PoolResponse>(POOLS_DATA(allowedPools), {
+    client: activeDataClient,
+  })
 
   const {
     loading: loading24,
     error: error24,
     data: data24,
-  } = useQuery<GlobalResponse>(GLOBAL_DATA(block24?.number ?? 0), { client: activeDataClient })
+  } = useQuery<PoolResponse>(POOLS_DATA(allowedPools, block24?.number ?? 0), { client: activeDataClient })
 
   const {
     loading: loading48,
     error: error48,
     data: data48,
-  } = useQuery<GlobalResponse>(GLOBAL_DATA(block48?.number ?? 0), { client: activeDataClient })
+  } = useQuery<PoolResponse>(POOLS_DATA(allowedPools, block48?.number ?? 0), { client: activeDataClient })
 
   const anyError = Boolean(error || error24 || error48 || blockError)
   const anyLoading = Boolean(loading || loading24 || loading48)
 
-  const parsed = data?.factories?.[0]
-  const parsed24 = data24?.factories?.[0]
-  const parsed48 = data48?.factories?.[0]
-
   const formattedData: ProtocolData | undefined = useMemo(() => {
-    if (anyError || anyLoading || !parsed || !blocks || tvlOffset === undefined) {
+    if (anyError || anyLoading || !data?.pools || !blocks) {
       return undefined
     }
 
-    // volume data
-    const volumeUSD =
-      parsed && parsed24
-        ? parseFloat(parsed.totalVolumeUSD) - parseFloat(parsed24.totalVolumeUSD)
-        : parseFloat(parsed.totalVolumeUSD)
+    // Aggregate current data
+    const aggregate = data.pools.reduce(
+      (acc, pool) => {
+        acc.txCount += parseFloat(pool.txCount)
+        acc.volumeUSD += parseFloat(pool.volumeUSD)
+        acc.feesUSD += parseFloat(pool.feesUSD)
+        acc.tvlUSD += parseFloat(pool.totalValueLockedUSD)
+        return acc
+      },
+      { txCount: 0, volumeUSD: 0, feesUSD: 0, tvlUSD: 0 },
+    )
 
-    const volumeOneWindowAgo =
-      parsed24?.totalVolumeUSD && parsed48?.totalVolumeUSD
-        ? parseFloat(parsed24.totalVolumeUSD) - parseFloat(parsed48.totalVolumeUSD)
-        : undefined
+    // Aggregate 24h ago data
+    const aggregate24 = data24?.pools.reduce(
+      (acc, pool) => {
+        acc.txCount += parseFloat(pool.txCount)
+        acc.volumeUSD += parseFloat(pool.volumeUSD)
+        acc.feesUSD += parseFloat(pool.feesUSD)
+        acc.tvlUSD += parseFloat(pool.totalValueLockedUSD)
+        return acc
+      },
+      { txCount: 0, volumeUSD: 0, feesUSD: 0, tvlUSD: 0 },
+    )
 
+    // Aggregate 48h ago data
+    const aggregate48 = data48?.pools.reduce(
+      (acc, pool) => {
+        acc.txCount += parseFloat(pool.txCount)
+        acc.volumeUSD += parseFloat(pool.volumeUSD)
+        acc.feesUSD += parseFloat(pool.feesUSD)
+        acc.tvlUSD += parseFloat(pool.totalValueLockedUSD)
+        return acc
+      },
+      { txCount: 0, volumeUSD: 0, feesUSD: 0, tvlUSD: 0 },
+    )
+
+    // Calculate changes
+    const volumeUSD = aggregate24 ? aggregate.volumeUSD - aggregate24.volumeUSD : aggregate.volumeUSD
+    const volumeOneWindowAgo = aggregate24 && aggregate48 ? aggregate24.volumeUSD - aggregate48.volumeUSD : undefined
     const volumeUSDChange =
       volumeUSD && volumeOneWindowAgo ? ((volumeUSD - volumeOneWindowAgo) / volumeOneWindowAgo) * 100 : 0
 
-    // total value locked
-    const tvlUSDChange = getPercentChange(parsed?.totalValueLockedUSD, parsed24?.totalValueLockedUSD)
-
-    // 24H transactions
-    const txCount =
-      parsed && parsed24 ? parseFloat(parsed.txCount) - parseFloat(parsed24.txCount) : parseFloat(parsed.txCount)
-
-    const txCountOneWindowAgo =
-      parsed24 && parsed48 ? parseFloat(parsed24.txCount) - parseFloat(parsed48.txCount) : undefined
-
+    const txCount = aggregate24 ? aggregate.txCount - aggregate24.txCount : aggregate.txCount
+    const txCountOneWindowAgo = aggregate24 && aggregate48 ? aggregate24.txCount - aggregate48.txCount : undefined
     const txCountChange =
       txCount && txCountOneWindowAgo ? getPercentChange(txCount.toString(), txCountOneWindowAgo.toString()) : 0
 
-    const feesOneWindowAgo =
-      parsed24 && parsed48 ? parseFloat(parsed24.totalFeesUSD) - parseFloat(parsed48.totalFeesUSD) : undefined
-
-    const feesUSD =
-      parsed && parsed24
-        ? parseFloat(parsed.totalFeesUSD) - parseFloat(parsed24.totalFeesUSD)
-        : parseFloat(parsed.totalFeesUSD)
-
+    const feesUSD = aggregate24 ? aggregate.feesUSD - aggregate24.feesUSD : aggregate.feesUSD
+    const feesOneWindowAgo = aggregate24 && aggregate48 ? aggregate24.feesUSD - aggregate48.feesUSD : undefined
     const feeChange =
       feesUSD && feesOneWindowAgo ? getPercentChange(feesUSD.toString(), feesOneWindowAgo.toString()) : 0
 
     return {
       volumeUSD,
-      volumeUSDChange: typeof volumeUSDChange === 'number' ? volumeUSDChange : 0,
-      tvlUSD: allowedTVL ?? 0, // parseFloat(parsed?.totalValueLockedUSD) - tvlOffset,
-      tvlUSDChange,
+      volumeUSDChange,
+      tvlUSD: aggregate.tvlUSD,
+      tvlUSDChange: getPercentChange(aggregate.tvlUSD.toString(), aggregate24?.tvlUSD?.toString()),
       feesUSD,
       feeChange,
       txCount,
       txCountChange,
     }
-  }, [anyError, anyLoading, blocks, parsed, parsed24, parsed48, tvlOffset, allowedTVL])
+  }, [anyError, anyLoading, blocks, data, data24, data48])
+
   return {
     loading: anyLoading,
     error: anyError,
