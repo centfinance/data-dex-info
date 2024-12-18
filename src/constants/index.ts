@@ -58,6 +58,10 @@ export const TOKEN_ALLOW_LIST: { [key: string]: string[] } = {
     '0xeb68ef0550a5532447da0fea4f0ed9f804803b8b', //VOLARA (VOL)
     '0x1becf440e8bcfc78cdfd45f29f7b1dc04df7777c', //Finquarium (FIN)
     '0xf8f97a79a3fa77104fab4814e3ed93899777de0d', //Datapig (GDP)
+    '0xD561ce710fF7Ce7d93fd7B1F0fF1B1989Fe7256E', //MindDAO
+    '0xC7a473434290671cffeA503ca4b7b160f929C1eC', //DNA DATADAO
+    '0x579c80E02Ef43345Ce3A4C833c49da9730BD0f3f', //Prime Insights
+    '0xfB41a4a2d2afF36d42b7388aD666dDA43f6c923f', //vCHARS AI
   ],
   [SupportedNetwork.VANA_MOKSHA]: [
     '0xb39a50b5806039c82932bb96cefbcbc61231045c', // USDC
@@ -117,6 +121,10 @@ export const POOL_ALLOW_LIST: { [key: string]: string[] } = {
     '0x5f77aac938ef1cda2e0e4ce11725eeccef4981c8', //VOLARA (VOL)
     '0xe5e953b7b9c034d35393dce58092df9d74eb1c3c', //Finquarium (FIN)
     '0x960f741ecd17768fd91c386099ae7be1bfcb56f3', //Datapig (GDP)
+    '0xfbdd88936e0ae5ad810df7f8ca6c38114fa27bf6', //MindDAO
+    '0x6489d08f29cce32762554e42b9ab0d067d7b58f2', //DNA DATADAO
+    '0xb6f95e5ed3bde7bc4bd2c282563b6787edd6ef85', //Prime Insights
+    '0xab70e2787b1171d244f1e02a58bd66414f03f63c', //vCHARS AI
   ],
   [SupportedNetwork.VANA_MOKSHA]: [],
 }
