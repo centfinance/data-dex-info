@@ -58,10 +58,10 @@ export const TOKEN_ALLOW_LIST: { [key: string]: string[] } = {
     '0xeb68ef0550a5532447da0fea4f0ed9f804803b8b', //VOLARA (VOL)
     '0x1becf440e8bcfc78cdfd45f29f7b1dc04df7777c', //Finquarium (FIN)
     '0xf8f97a79a3fa77104fab4814e3ed93899777de0d', //Datapig (GDP)
-    '0xD561ce710fF7Ce7d93fd7B1F0fF1B1989Fe7256E', //MindDAO
-    '0xC7a473434290671cffeA503ca4b7b160f929C1eC', //DNA DATADAO
-    '0x579c80E02Ef43345Ce3A4C833c49da9730BD0f3f', //Prime Insights
-    '0xfB41a4a2d2afF36d42b7388aD666dDA43f6c923f', //vCHARS AI
+    '0xd561ce710ff7ce7d93fd7b1f0ff1b1989fe7256e', //MindDAO
+    '0xc7a473434290671cffea503ca4b7b160f929c1ec', //DNA DATADAO
+    '0x579c80e02ef43345ce3a4c833c49da9730bd0f3f', //Prime Insights
+    '0xfb41a4a2d2aff36d42b7388ad666dda43f6c923f', //vCHARS AI
   ],
   [SupportedNetwork.VANA_MOKSHA]: [
     '0xb39a50b5806039c82932bb96cefbcbc61231045c', // USDC
