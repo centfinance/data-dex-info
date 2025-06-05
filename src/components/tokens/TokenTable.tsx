@@ -78,6 +78,7 @@ const DataRow = ({ tokenData, index }: { tokenData: TokenData; index: number }) 
     <LinkWrapper to={`${basePath.endsWith('/') ? basePath : basePath + '/'}tokens/${tokenData.address}`}>
       <ResponsiveGrid>
         <Label>{index + 1}</Label>
+        {/* @ts-ignore */}
         <Label>
           <RowFixed>
             <ResponsiveLogo address={tokenData.address} />
@@ -98,6 +99,7 @@ const DataRow = ({ tokenData, index }: { tokenData: TokenData; index: number }) 
           {formatDollarAmount(tokenData.priceUSD)}
         </Label>
         <Label end={1} fontWeight={400}>
+          {/* @ts-ignore */}
           <Percent value={tokenData.priceUSDChange} fontWeight={400} />
         </Label>
         <Label end={1} fontWeight={400}>

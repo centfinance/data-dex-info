@@ -58,12 +58,16 @@ export default function ListUpdatePopup({
       <AutoColumn style={{ flex: '1' }} $gap="8px">
         {auto ? (
           <TYPE.body fontWeight={500}>
-            The token list &quot;{oldList.name}&quot; has been updated to{' '}
-            <strong>{listVersionLabel(newList.version)}</strong>.
+            {/* @ts-ignore */}
+            <>
+              The token list &quot;{oldList.name}&quot; has been updated to{' '}
+              <strong>{listVersionLabel(newList.version)}</strong>.
+            </>
           </TYPE.body>
         ) : (
           <>
             <div>
+              {/* @ts-ignore */}
               <Text>
                 An update is available for the token list &quot;{oldList.name}&quot; (
                 {listVersionLabel(oldList.version)} to {listVersionLabel(newList.version)}).

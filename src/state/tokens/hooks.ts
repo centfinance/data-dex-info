@@ -201,7 +201,7 @@ export function useTokenPriceData(
   // construct timestamps and check if we need to fetch more data
   const oldestTimestampFetched = token.priceData.oldestFetchedTimestamp
   const utcCurrentTime = dayjs()
-  const startTimestamp = utcCurrentTime.subtract(1, timeWindow).startOf('hour').unix()
+  const startTimestamp = utcCurrentTime.subtract(1, timeWindow as any).startOf('hour').unix()
 
   useEffect(() => {
     async function fetch() {

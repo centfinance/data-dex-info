@@ -102,13 +102,6 @@ const Chart = ({
             <Tooltip
               cursor={{ stroke: theme?.bg2 }}
               contentStyle={{ display: 'none' }}
-              formatter={(value: number, name: string, config: { payload: { time: string; value: number } }) => {
-                if (setValue && parsedValue !== config.payload.value) {
-                  setValue(config.payload.value)
-                }
-                const formattedTime = dayjs(config.payload.time).format('MMM D, YYYY')
-                if (setLabel && label !== formattedTime) setLabel(formattedTime)
-              }}
             />
             <Area dataKey="value" type="monotone" stroke={color} fill="url(#gradient)" strokeWidth={2} />
           </AreaChart>

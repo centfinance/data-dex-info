@@ -123,31 +123,6 @@ const Chart = ({
             <Tooltip
               cursor={{ fill: theme?.bg2 }}
               contentStyle={{ display: 'none' }}
-              formatter={(value: number, name: string, config: { payload: { time: string; value: number } }) => {
-                if (setValue && parsedValue !== config.payload.value) {
-                  setValue(config.payload.value)
-                }
-                const formattedTime = dayjs(config.payload.time).format('MMM D')
-                const formattedTimeDaily = dayjs(config.payload.time).format('MMM D YYYY')
-                const formattedTimePlusWeek = dayjs(config.payload.time).add(1, 'week')
-                const formattedTimePlusMonth = dayjs(config.payload.time).add(1, 'month')
-
-                if (setLabel && label !== formattedTime) {
-                  if (activeWindow === VolumeWindow.weekly) {
-                    const isCurrent = formattedTimePlusWeek.isAfter(now)
-                    setLabel(
-                      formattedTime + '-' + (isCurrent ? 'current' : formattedTimePlusWeek.format('MMM D, YYYY')),
-                    )
-                  } else if (activeWindow === VolumeWindow.monthly) {
-                    const isCurrent = formattedTimePlusMonth.isAfter(now)
-                    setLabel(
-                      formattedTime + '-' + (isCurrent ? 'current' : formattedTimePlusMonth.format('MMM D, YYYY')),
-                    )
-                  } else {
-                    setLabel(formattedTimeDaily)
-                  }
-                }
-              }}
             />
             <Bar
               dataKey="value"

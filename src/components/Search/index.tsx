@@ -290,7 +290,11 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
                       <RowFixed>
                         <CurrencyLogo address={t.address} />
                         <TYPE.label ml="10px">
-                          <HoverInlineText text={`${t.name} (${t.symbol})`} />{' '}
+                          {/* @ts-ignore */}
+                          <>
+                            <HoverInlineText text={`${t.name} (${t.symbol})`} />
+                            {' '}
+                          </>
                         </TYPE.label>
                         <SavedIcon
                           id="watchlist-icon"
@@ -357,6 +361,7 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
                       <RowFixed>
                         <DoubleCurrencyLogo address0={p.token0.address} address1={p.token1.address} />
                         <TYPE.label ml="10px" style={{ whiteSpace: 'nowrap' }}>
+                          {/* @ts-ignore */}
                           <HoverInlineText maxCharacters={12} text={`${p.token0.symbol} / ${p.token1.symbol}`} />
                         </TYPE.label>
                         <GreyBadge ml="10px">{feeTierPercent(p.feeTier)}</GreyBadge>

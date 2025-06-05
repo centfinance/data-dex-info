@@ -73,6 +73,7 @@ const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => 
       <ResponsiveGrid>
         <Label fontWeight={400}>{index + 1}</Label>
         <Label fontWeight={400}>
+          {/* @ts-ignore */}
           <RowFixed>
             <DoubleCurrencyLogo address0={poolData.token0.address} address1={poolData.token1.address} />
             <TYPE.label ml="8px">

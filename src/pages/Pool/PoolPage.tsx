@@ -282,6 +282,7 @@ function PoolPage({ address }: { address: string }) {
                 <ToggleRow align="flex-start">
                   <AutoColumn>
                     <TYPE.label fontSize="24px" height="30px">
+                      {/* @ts-ignore */}
                       <MonoSpace>
                         {latestValue
                           ? formatDollarAmount(latestValue)
@@ -293,6 +294,7 @@ function PoolPage({ address }: { address: string }) {
                       </MonoSpace>
                     </TYPE.label>
                     <TYPE.main height="20px" fontSize="12px">
+                      {/* @ts-ignore */}
                       {valueLabel ? <MonoSpace>{valueLabel} (UTC)</MonoSpace> : ''}
                     </TYPE.main>
                   </AutoColumn>

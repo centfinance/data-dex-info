@@ -198,9 +198,11 @@ export default function Home() {
                   <AutoColumn $gap="4px">
                     <TYPE.mediumHeader fontSize="16px">TVL</TYPE.mediumHeader>
                     <TYPE.largeHeader fontSize="32px">
+                      {/* @ts-ignore */}
                       <MonoSpace>{tvlValue} </MonoSpace>
                     </TYPE.largeHeader>
                     <TYPE.main fontSize="12px" height="14px">
+                      {/* @ts-ignore */}
                       {leftLabel ? <MonoSpace>{leftLabel} (UTC)</MonoSpace> : null}
                     </TYPE.main>
                   </AutoColumn>
@@ -271,9 +273,11 @@ export default function Home() {
                   <AutoColumn $gap="4px">
                     <TYPE.mediumHeader fontSize="16px">Volume 24H</TYPE.mediumHeader>
                     <TYPE.largeHeader fontSize="32px">
+                      {/* @ts-ignore */}
                       <MonoSpace>{volumeValue}</MonoSpace>
                     </TYPE.largeHeader>
                     <TYPE.main fontSize="12px" height="14px">
+                      {/* @ts-ignore */}
                       {rightLabel ? <MonoSpace>{rightLabel} (UTC)</MonoSpace> : null}
                     </TYPE.main>
                   </AutoColumn>

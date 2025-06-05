@@ -35,6 +35,7 @@ const DataCard = ({ poolData }: { poolData: PoolData }) => {
           <RowFixed>
             <DoubleCurrencyLogo address0={poolData.token0.address} address1={poolData.token1.address} size={16} />
             <TYPE.label ml="8px">
+              {/* @ts-ignore */}
               <HoverInlineText maxCharacters={10} text={`${poolData.token0.symbol}/${poolData.token1.symbol}`} />
             </TYPE.label>
             <GreyBadge ml="10px" fontSize="12px">

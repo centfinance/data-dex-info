@@ -111,12 +111,15 @@ const DataRow = ({ transaction, color }: { transaction: Transaction; color?: str
         {formatDollarAmount(transaction.amountUSD)}
       </Label>
       <Label end={1} fontWeight={400}>
+        {/* @ts-ignore */}
         <HoverInlineText text={`${formatAmount(abs0)}  ${transaction.token0Symbol}`} maxCharacters={16} />
       </Label>
       <Label end={1} fontWeight={400}>
+        {/* @ts-ignore */}
         <HoverInlineText text={`${formatAmount(abs1)}  ${transaction.token1Symbol}`} maxCharacters={16} />
       </Label>
       <Label end={1} fontWeight={400}>
+        {/* @ts-ignore */}
         <ExternalLink
           href={getExplorerLink(ChainId.MAINNET, transaction.sender, ExplorerDataType.ADDRESS)}
           style={{ color: color ?? theme?.blue1 }}

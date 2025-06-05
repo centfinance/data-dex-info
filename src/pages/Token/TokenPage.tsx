@@ -279,6 +279,7 @@ export default function TokenPage() {
                     <AutoColumn>
                       <RowFixed>
                         <TYPE.label fontSize="24px" height="30px">
+                          {/* @ts-ignore */}
                           <MonoSpace>
                             {latestValue
                               ? formatDollarAmount(latestValue, 2)
@@ -291,6 +292,7 @@ export default function TokenPage() {
                         </TYPE.label>
                       </RowFixed>
                       <TYPE.main height="20px" fontSize="12px">
+                        {/* @ts-ignore */}
                         {valueLabel ? (
                           <MonoSpace>{valueLabel} (UTC)</MonoSpace>
                         ) : (
