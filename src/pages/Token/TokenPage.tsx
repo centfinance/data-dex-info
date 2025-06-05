@@ -283,10 +283,10 @@ export default function TokenPage() {
                             {latestValue
                               ? formatDollarAmount(latestValue, 2)
                               : view === ChartView.VOL
-                              ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
-                              : view === ChartView.TVL
-                              ? formatDollarAmount(formattedTvlData[formattedTvlData.length - 1]?.value)
-                              : formatDollarAmount(tokenData.priceUSD, 2)}
+                                ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
+                                : view === ChartView.TVL
+                                  ? formatDollarAmount(formattedTvlData[formattedTvlData.length - 1]?.value)
+                                  : formatDollarAmount(tokenData.priceUSD, 2)}
                           </MonoSpace>
                         </TYPE.label>
                       </RowFixed>

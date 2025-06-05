@@ -186,15 +186,15 @@ export function usePoolDatas(poolAddresses: string[]): {
       current && oneDay && twoDay
         ? get2DayChange(current.volumeUSD, oneDay.volumeUSD, twoDay.volumeUSD)
         : current
-        ? [parseFloat(current.volumeUSD), 0]
-        : [0, 0]
+          ? [parseFloat(current.volumeUSD), 0]
+          : [0, 0]
 
     const volumeUSDWeek =
       current && week
         ? parseFloat(current.volumeUSD) - parseFloat(week.volumeUSD)
         : current
-        ? parseFloat(current.volumeUSD)
-        : 0
+          ? parseFloat(current.volumeUSD)
+          : 0
 
     // Hotifx: Subtract fees from TVL to correct data while subgraph is fixed.
     /**

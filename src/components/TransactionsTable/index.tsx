@@ -103,8 +103,8 @@ const DataRow = ({ transaction, color }: { transaction: Transaction; color?: str
           {transaction.type === TransactionType.MINT
             ? `Add ${transaction.token0Symbol} and ${transaction.token1Symbol}`
             : transaction.type === TransactionType.SWAP
-            ? `Swap ${inputTokenSymbol} for ${outputTokenSymbol}`
-            : `Remove ${transaction.token0Symbol} and ${transaction.token1Symbol}`}
+              ? `Swap ${inputTokenSymbol} for ${outputTokenSymbol}`
+              : `Remove ${transaction.token0Symbol} and ${transaction.token1Symbol}`}
         </Label>
       </ExternalLink>
       <Label end={1} fontWeight={400}>

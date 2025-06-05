@@ -220,11 +220,12 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
   // filter on view
   const [showWatchlist, setShowWatchlist] = useState(false)
   const tokensForList = useMemo(
-    () => (showWatchlist ? watchListTokenData ?? [] : tokens.sort((t0, t1) => (t0.volumeUSD > t1.volumeUSD ? -1 : 1))),
+    () =>
+      showWatchlist ? (watchListTokenData ?? []) : tokens.sort((t0, t1) => (t0.volumeUSD > t1.volumeUSD ? -1 : 1)),
     [showWatchlist, tokens, watchListTokenData],
   )
   const poolForList = useMemo(
-    () => (showWatchlist ? watchListPoolData ?? [] : pools.sort((p0, p1) => (p0.volumeUSD > p1.volumeUSD ? -1 : 1))),
+    () => (showWatchlist ? (watchListPoolData ?? []) : pools.sort((p0, p1) => (p0.volumeUSD > p1.volumeUSD ? -1 : 1))),
     [pools, showWatchlist, watchListPoolData],
   )
 

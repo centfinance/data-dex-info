@@ -163,15 +163,15 @@ export function useFetchedTokenDatas(tokenAddresses: string[]): {
       current && oneDay && twoDay
         ? get2DayChange(current.volumeUSD, oneDay.volumeUSD, twoDay.volumeUSD)
         : current
-        ? [parseFloat(current.volumeUSD), 0]
-        : [0, 0]
+          ? [parseFloat(current.volumeUSD), 0]
+          : [0, 0]
 
     const volumeUSDWeek =
       current && week
         ? parseFloat(current.volumeUSD) - parseFloat(week.volumeUSD)
         : current
-        ? parseFloat(current.volumeUSD)
-        : 0
+          ? parseFloat(current.volumeUSD)
+          : 0
     const tvlUSD = current ? parseFloat(current.totalValueLockedUSD) : 0
     const tvlUSDChange = getPercentChange(current?.totalValueLockedUSD, oneDay?.totalValueLockedUSD)
     const tvlToken = current ? parseFloat(current.totalValueLocked) : 0
@@ -187,14 +187,14 @@ export function useFetchedTokenDatas(tokenAddresses: string[]): {
       current && oneDay
         ? parseFloat(current.txCount) - parseFloat(oneDay.txCount)
         : current
-        ? parseFloat(current.txCount)
-        : 0
+          ? parseFloat(current.txCount)
+          : 0
     const feesUSD =
       current && oneDay
         ? parseFloat(current.feesUSD) - parseFloat(oneDay.feesUSD)
         : current
-        ? parseFloat(current.feesUSD)
-        : 0
+          ? parseFloat(current.feesUSD)
+          : 0
 
     accum[address] = {
       exists: !!current,
