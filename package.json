@@ -84,7 +84,7 @@
     "start-server-and-test": "^1.11.0",
     "styled-components": "^6.1.0",
     "styled-system": "^5.1.5",
-    "typescript": "^5.2.2",
+    "typescript": "5.4",
     "use-count-up": "^2.2.5",
     "wcag-contrast": "^3.0.0"
   },
