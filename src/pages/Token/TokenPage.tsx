@@ -314,29 +314,35 @@ export default function TokenPage() {
                     <AutoColumn>
                       <RowFixed>
                         <TYPE.label fontSize="24px" height="30px">
-                          {chartSource === ChartSource.DEXSCREENER ? (
-                            null
-                          ) : (
-                            <MonoSpace>
-                              {latestValue
-                                ? formatDollarAmount(latestValue, 2)
-                                : view === ChartView.VOL
-                                  ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
-                                  : view === ChartView.TVL
-                                    ? formatDollarAmount(formattedTvlData[formattedTvlData.length - 1]?.value)
-                                    : formatDollarAmount(tokenData.priceUSD, 2)}
-                            </MonoSpace>
-                          )}
+                          {/* @ts-ignore */}
+                          <>
+                            {/* @ts-ignore */}
+                            {(chartSource !== ChartSource.DEXSCREENER) && (
+                              <MonoSpace>
+                                {latestValue
+                                  ? formatDollarAmount(latestValue, 2)
+                                  : view === ChartView.VOL
+                                    ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
+                                    : view === ChartView.TVL
+                                      ? formatDollarAmount(formattedTvlData[formattedTvlData.length - 1]?.value)
+                                      : formatDollarAmount(tokenData.priceUSD, 2)}
+                              </MonoSpace>
+                            )}
+                          </>
                         </TYPE.label>
                       </RowFixed>
                       <TYPE.main height="20px" fontSize="12px">
-                        {chartSource === ChartSource.DEXSCREENER ? (
-                          null
-                        ) : valueLabel ? (
-                          <MonoSpace>{valueLabel} (UTC)</MonoSpace>
-                        ) : (
-                          <MonoSpace>{dayjs.utc().format('MMM D, YYYY')}</MonoSpace>
-                        )}
+                        {/* @ts-ignore */}
+                        <>
+                          {/* @ts-ignore */}
+                          {(chartSource !== ChartSource.DEXSCREENER) && (
+                            valueLabel ? (
+                              <MonoSpace>{valueLabel} (UTC)</MonoSpace>
+                            ) : (
+                              <MonoSpace>{dayjs.utc().format('MMM D, YYYY')}</MonoSpace>
+                            )
+                          )}
+                        </>
                       </TYPE.main>
                     </AutoColumn>
                     <AutoColumn $gap="8px">
