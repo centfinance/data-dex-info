@@ -161,7 +161,6 @@ export default function Home() {
   return (
     <Trace page={'home-page'} shouldLogImpression>
       <PageWrapper>
-        <ThemedBackgroundGlobal $backgroundColor={activeNetwork.bgColor} />
         <AutoColumn $gap="16px">
           <TYPE.main>Data DEX Overview</TYPE.main>
           <HideSmall>

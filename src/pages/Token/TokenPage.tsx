@@ -21,7 +21,7 @@ import CurrencyLogo from 'components/CurrencyLogo'
 import { formatDollarAmount } from 'utils/numbers'
 import Percent from 'components/Percent'
 import { ButtonPrimary, ButtonGray, SavedIcon } from 'components/Button'
-import { DarkGreyCard, LightGreyCard } from 'components/Card'
+import { DarkGreyCard, DarkGreyCardNoPadding, LightGreyCard } from 'components/Card'
 import { usePoolDatas } from 'state/pools/hooks'
 import PoolTable from 'components/pools/PoolTable'
 import LineChart from 'components/LineChart/alt'
@@ -200,7 +200,6 @@ export default function TokenPage() {
   return (
     <Trace page="token-page" shouldLogImpression>
       <PageWrapper>
-        <ThemedBackground $backgroundColor={backgroundColor} />
         {tokenData ? (
           !tokenData.exists ? (
             <LightGreyCard style={{ textAlign: 'center' }}>
@@ -309,43 +308,10 @@ export default function TokenPage() {
                     </AutoColumn>
                   </AutoColumn>
                 </DarkGreyCard>
-                <DarkGreyCard>
-                  <RowBetween align="flex-start">
-                    <AutoColumn>
-                      <RowFixed>
-                        <TYPE.label fontSize="24px" height="30px">
-                          {/* @ts-ignore */}
-                          <>
-                            {/* @ts-ignore */}
-                            {(chartSource !== ChartSource.DEXSCREENER) && (
-                              <MonoSpace>
-                                {latestValue
-                                  ? formatDollarAmount(latestValue, 2)
-                                  : view === ChartView.VOL
-                                    ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
-                                    : view === ChartView.TVL
-                                      ? formatDollarAmount(formattedTvlData[formattedTvlData.length - 1]?.value)
-                                      : formatDollarAmount(tokenData.priceUSD, 2)}
-                              </MonoSpace>
-                            )}
-                          </>
-                        </TYPE.label>
-                      </RowFixed>
-                      <TYPE.main height="20px" fontSize="12px">
-                        {/* @ts-ignore */}
-                        <>
-                          {/* @ts-ignore */}
-                          {(chartSource !== ChartSource.DEXSCREENER) && (
-                            valueLabel ? (
-                              <MonoSpace>{valueLabel} (UTC)</MonoSpace>
-                            ) : (
-                              <MonoSpace>{dayjs.utc().format('MMM D, YYYY')}</MonoSpace>
-                            )
-                          )}
-                        </>
-                      </TYPE.main>
-                    </AutoColumn>
-                    <AutoColumn $gap="8px">
+                <AutoColumn $gap="8px">
+                  <>
+                    <SectionHeader>
+                      <TYPE.main>Info</TYPE.main>
                       <SmallToggleWrapper>
                         <ToggleElementFree
                           isActive={chartSource === ChartSource.DEXSCREENER}
@@ -362,72 +328,108 @@ export default function TokenPage() {
                           Native
                         </ToggleElementFree>
                       </SmallToggleWrapper>
-                      {chartSource === ChartSource.NATIVE && (
-                        <ToggleWrapper width="180px">
-                          <ToggleElementFree
-                            isActive={view === ChartView.VOL}
-                            fontSize="12px"
-                            onClick={() => (view === ChartView.VOL ? setView(ChartView.TVL) : setView(ChartView.VOL))}
-                          >
-                            Volume
-                          </ToggleElementFree>
-                          <ToggleElementFree
-                            isActive={view === ChartView.TVL}
-                            fontSize="12px"
-                            onClick={() => (view === ChartView.TVL ? setView(ChartView.PRICE) : setView(ChartView.TVL))}
-                          >
-                            TVL
-                          </ToggleElementFree>
-                          <ToggleElementFree
-                            isActive={view === ChartView.PRICE}
-                            fontSize="12px"
-                            onClick={() => setView(ChartView.PRICE)}
-                          >
-                            Price
-                          </ToggleElementFree>
-                        </ToggleWrapper>
-                      )}
-                    </AutoColumn>
-                  </RowBetween>
-                  {chartSource === ChartSource.DEXSCREENER ? (
-                    <DexScreenerIframe
-                      src={dexscreenerChartUrl}
-                      title="DexScreener Chart"
-                      sandbox="allow-scripts allow-same-origin"
-                    />
-                  ) : view === ChartView.TVL ? (
-                    <LineChart
-                      data={formattedTvlData}
-                      color={backgroundColor}
-                      minHeight={340}
-                      value={latestValue}
-                      label={valueLabel}
-                      setValue={setLatestValue}
-                      setLabel={setValueLabel}
-                    />
-                  ) : view === ChartView.VOL ? (
-                    <BarChart
-                      data={formattedVolumeData}
-                      color={backgroundColor}
-                      minHeight={340}
-                      value={latestValue}
-                      label={valueLabel}
-                      setValue={setLatestValue}
-                      setLabel={setValueLabel}
-                    />
-                  ) : view === ChartView.PRICE ? (
-                    adjustedToCurrent ? (
-                      <CandleChart
-                        data={adjustedToCurrent}
-                        setValue={setLatestValue}
-                        setLabel={setValueLabel}
-                        color={backgroundColor}
-                      />
+                    </SectionHeader>
+                    
+                    {(chartSource === ChartSource.DEXSCREENER) ? (
+                      <DarkGreyCardNoPadding>
+                        <DexScreenerIframe
+                          src={dexscreenerChartUrl}
+                          title="DexScreener Chart"
+                          sandbox="allow-scripts allow-same-origin"
+                        />
+                      </DarkGreyCardNoPadding>
                     ) : (
-                      <LocalLoader fill={false} />
-                    )
-                  ) : null}
-                </DarkGreyCard>
+                      <DarkGreyCard>
+                        <RowBetween align="flex-start">
+                          <AutoColumn>
+                            <RowFixed>
+                              <TYPE.label fontSize="24px" height="30px">
+                                {/* @ts-ignore */}
+                                <MonoSpace>
+                                  {latestValue
+                                    ? formatDollarAmount(latestValue, 2)
+                                    : view === ChartView.VOL
+                                      ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
+                                      : view === ChartView.TVL
+                                        ? formatDollarAmount(formattedTvlData[formattedTvlData.length - 1]?.value)
+                                        : formatDollarAmount(tokenData.priceUSD, 2)}
+                                </MonoSpace>
+                              </TYPE.label>
+                            </RowFixed>
+                            <TYPE.main height="20px" fontSize="12px">
+                              {/* @ts-ignore */}
+                              <>
+                                {/* @ts-ignore */}
+                                {valueLabel ? (
+                                  <MonoSpace>{valueLabel} (UTC)</MonoSpace>
+                                ) : (
+                                  <MonoSpace>{dayjs.utc().format('MMM D, YYYY')}</MonoSpace>
+                                )}
+                              </>
+                            </TYPE.main>
+                          </AutoColumn>
+                          <AutoColumn $gap="8px">
+                            <ToggleWrapper width="180px">
+                              <ToggleElementFree
+                                isActive={view === ChartView.VOL}
+                                fontSize="12px"
+                                onClick={() => (view === ChartView.VOL ? setView(ChartView.TVL) : setView(ChartView.VOL))}
+                              >
+                                Volume
+                              </ToggleElementFree>
+                              <ToggleElementFree
+                                isActive={view === ChartView.TVL}
+                                fontSize="12px"
+                                onClick={() => (view === ChartView.TVL ? setView(ChartView.PRICE) : setView(ChartView.TVL))}
+                              >
+                                TVL
+                              </ToggleElementFree>
+                              <ToggleElementFree
+                                isActive={view === ChartView.PRICE}
+                                fontSize="12px"
+                                onClick={() => setView(ChartView.PRICE)}
+                              >
+                                Price
+                              </ToggleElementFree>
+                            </ToggleWrapper>
+                          </AutoColumn>
+                        </RowBetween>
+                        {view === ChartView.TVL ? (
+                          <LineChart
+                            data={formattedTvlData}
+                            color={backgroundColor}
+                            minHeight={340}
+                            value={latestValue}
+                            label={valueLabel}
+                            setValue={setLatestValue}
+                            setLabel={setValueLabel}
+                          />
+                        ) : view === ChartView.VOL ? (
+                          <BarChart
+                            data={formattedVolumeData}
+                            color={backgroundColor}
+                            minHeight={340}
+                            value={latestValue}
+                            label={valueLabel}
+                            setValue={setLatestValue}
+                            setLabel={setValueLabel}
+                          />
+                        ) : view === ChartView.PRICE ? (
+                          adjustedToCurrent ? (
+                            <CandleChart
+                              data={adjustedToCurrent}
+                              setValue={setLatestValue}
+                              setLabel={setValueLabel}
+                              color={backgroundColor}
+                            />
+                          ) : (
+                            <LocalLoader fill={false} />
+                          )
+                        ) : null}
+                      </DarkGreyCard>
+                    )}
+                  </>
+                </AutoColumn>
               </ContentLayout>
               <TYPE.main>Pools</TYPE.main>
               <DarkGreyCard>
@@ -452,19 +454,23 @@ export default function TokenPage() {
                   </ToggleElementFree>
                 </SmallToggleWrapper>
               </SectionHeader>
-              <DarkGreyCard>
-                {transactionSource === TransactionSource.DEXSCREENER ? (
+              {transactionSource === TransactionSource.DEXSCREENER ? (
+                <DarkGreyCardNoPadding>
                   <DexScreenerIframe
                     src={dexscreenerTransactionsUrl}
                     title="DexScreener Transactions"
                     sandbox="allow-scripts allow-same-origin"
                   />
-                ) : transactions ? (
-                  <TransactionTable transactions={transactions} color={backgroundColor} />
-                ) : (
-                  <LocalLoader fill={false} />
-                )}
-              </DarkGreyCard>
+                </DarkGreyCardNoPadding>
+              ) : (
+                <DarkGreyCard>
+                  {transactions ? (
+                    <TransactionTable transactions={transactions} color={backgroundColor} />
+                  ) : (
+                    <LocalLoader fill={false} />
+                  )}
+                </DarkGreyCard>
+              )}
             </AutoColumn>
           )
         ) : (

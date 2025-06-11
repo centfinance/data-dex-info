@@ -21,12 +21,8 @@ const HeaderFrame = styled.div`
   width: 100%;
   top: 0;
   position: relative;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding: 1rem;
   z-index: 2;
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.12),
-    0 1px 2px rgba(0, 0, 0, 0.24);
 
   background-color: ${({ theme }) => theme.bg0};
 
@@ -102,8 +98,8 @@ const StyledNavLink = styled(NavLink)<{ $isActive: boolean }>`
   font-weight: 500;
 
   border-radius: ${({ $isActive }) => ($isActive ? '12px' : 'unset')};
-  background-color: ${({ theme, $isActive }) => ($isActive ? theme.bg2 : 'unset')};
-  color: ${({ theme, $isActive }) => ($isActive ? theme.text1 : theme.text3)};
+  background-color: ${({ theme, $isActive }) => ($isActive ? `#0000ff` : 'unset')};
+  color: ${({ theme, $isActive }) => ($isActive ? theme.text1 : theme.text2)};
 
   :hover,
   :focus {
