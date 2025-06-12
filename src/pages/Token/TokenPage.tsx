@@ -14,7 +14,7 @@ import { AutoColumn } from 'components/Column'
 import { RowBetween, RowFixed, AutoRow, RowFlat } from 'components/Row'
 import { TYPE, StyledInternalLink } from 'theme'
 import Loader, { LocalLoader } from 'components/Loader'
-import { ExternalLink, Download } from 'react-feather'
+import { ExternalLink, Download, X } from 'react-feather'
 import { ExternalLink as StyledExternalLink } from '../../theme/components'
 import useTheme from 'hooks/useTheme'
 import CurrencyLogo from 'components/CurrencyLogo'
@@ -43,6 +43,7 @@ import CMCLogo from '../../assets/images/cmc.png'
 import { useParams } from 'react-router-dom'
 import { Trace } from '@uniswap/analytics'
 import { ChainId } from '@vanadex/sdk-core'
+import Modal from 'components/Modal'
 
 const PriceText = styled(TYPE.label)`
   font-size: 36px;
@@ -92,6 +93,67 @@ const SectionHeader = styled(RowBetween)`
 
 const SmallToggleWrapper = styled(ToggleWrapper)`
   width: 120px;
+`
+
+const TradeModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+`
+
+const TradeIframe = styled.iframe`
+  width: 100%;
+  height: 640px;
+  border: none;
+  min-height: 640px;
+  background: ${({ theme }) => theme.bg1};
+  flex: 1;
+`
+
+const ModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 16px 20px;
+`
+
+const HeaderIcons = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`
+
+const IconButton = styled.button`
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.text2};
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    color: ${({ theme }) => theme.text1};
+    background: ${({ theme }) => theme.bg2};
+  }
+`
+
+const ExternalLinkIcon = styled.a`
+  color: ${({ theme }) => theme.text2};
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    color: ${({ theme }) => theme.text1};
+    background: ${({ theme }) => theme.bg2};
+  }
 `
 
 enum ChartView {
@@ -171,6 +233,9 @@ export default function TokenPage() {
   // source toggles
   const [chartSource, setChartSource] = useState(ChartSource.DEXSCREENER)
   const [transactionSource, setTransactionSource] = useState(TransactionSource.DEXSCREENER)
+  
+  // trade modal state
+  const [showTradeModal, setShowTradeModal] = useState(false)
 
   // pricing data
   const priceData = useTokenPriceData(formattedAddress, ONE_HOUR_SECONDS, timeWindow)
@@ -196,6 +261,10 @@ export default function TokenPage() {
   // DexScreener URLs
   const dexscreenerChartUrl = `https://dexscreener.com/vana/${formattedAddress}?embed=1&theme=dark&trades=0&info=0`
   const dexscreenerTransactionsUrl = `https://dexscreener.com/vana/${formattedAddress}?embed=1&theme=dark&chart=0&info=0`
+  
+  // Trade URLs
+  const swapIframeUrl = `https://www.datadex.com/#/swap?outputCurrency=${formattedAddress}`
+  const directSwapUrl = `https://www.datadex.com/#/swap?outputCurrency=${formattedAddress}`
 
   return (
     <Trace page="token-page" shouldLogImpression>
@@ -306,6 +375,13 @@ export default function TokenPage() {
                       <TYPE.main fontWeight={400}>24h Fees</TYPE.main>
                       <TYPE.label fontSize="24px">{formatDollarAmount(tokenData.feesUSD)}</TYPE.label>
                     </AutoColumn>
+                    <ButtonPrimary
+                      onClick={() => setShowTradeModal(true)}
+                      bgColor={backgroundColor}
+                      style={{ marginTop: '16px' }}
+                    >
+                      Trade
+                    </ButtonPrimary>
                   </AutoColumn>
                 </DarkGreyCard>
                 <AutoColumn $gap="8px">
@@ -476,6 +552,33 @@ export default function TokenPage() {
         ) : (
           <Loader />
         )}
+        
+        {/* Trade Modal */}
+        <Modal isOpen={showTradeModal} onDismiss={() => setShowTradeModal(false)} maxWidth={`480px`}>
+          <TradeModalContent>
+            <ModalHeader>
+              <TYPE.mediumHeader>Trade {tokenData?.symbol}</TYPE.mediumHeader>
+              <HeaderIcons>
+                <ExternalLinkIcon
+                  href={directSwapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink size={20} />
+                </ExternalLinkIcon>
+                <IconButton onClick={() => setShowTradeModal(false)}>
+                  <X size={20} />
+                </IconButton>
+              </HeaderIcons>
+            </ModalHeader>
+            
+            <TradeIframe
+              src={swapIframeUrl}
+              title="Datadex Swap"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+            />
+          </TradeModalContent>
+        </Modal>
       </PageWrapper>
     </Trace>
   )
