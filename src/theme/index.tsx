@@ -48,7 +48,7 @@ export function colors(darkMode: boolean): Colors {
 
     // backgrounds / greys
     bg0: darkMode ? 'oklch(.145 0 0)' : '#F7F8FA',
-    bg1: darkMode ? '#1F2128' : '#FFFFFF',
+    bg1: darkMode ? '#161616' : '#FFFFFF',
     bg2: darkMode ? '#2C2F36' : '#F7F8FA',
     bg3: darkMode ? 'oklch(.2 0 0)' : '#EDEEF2',
     bg4: darkMode ? '#565A69' : '#CED0D9',
