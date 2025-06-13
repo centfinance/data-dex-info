@@ -7,7 +7,7 @@ import BNB_LOGO_URL from '../assets/images/bnb-logo.svg'
 import BASE_LOGO_URL from '../assets/images/base-logo.svg'
 import { ChainId } from '@vanadex/sdk-core'
 import AVALANCHE_LOGO_URL from '../assets/images/avalanche-logo.png'
-import VANA_LOGO_URL from '../assets/images/vana-logo.svg'
+import VANA_LOGO_URL from '../assets/images/icon.svg'
 
 export enum SupportedNetwork {
   ETHEREUM,

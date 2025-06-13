@@ -25,6 +25,7 @@ import { useTransformedVolumeData } from 'hooks/chart'
 import { SmallOptionButton } from 'components/Button'
 import { VolumeWindow } from 'types'
 import { Trace } from '@uniswap/analytics'
+import HeaderImage from '../../assets/images/header.webp'
 
 const ChartWrapper = styled.div`
   width: 49%;
@@ -162,6 +163,8 @@ export default function Home() {
     <Trace page={'home-page'} shouldLogImpression>
       <PageWrapper>
         <AutoColumn $gap="16px">
+          <img src={HeaderImage} alt="Data DEX Header" style={{ width: '100%' }} />
+
           <TYPE.main>Data DEX Overview</TYPE.main>
           <HideSmall>
             <DarkGreyCard>
