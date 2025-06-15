@@ -94,7 +94,7 @@ const UniLogo = styled.div`
   display: block;
   transition: all 0.2s ease;
   :hover {
-    transform: rotate(-5deg);
+    transform: rotate(-2deg);
   }
   ${({ theme }) => theme.mediaWidth.upToSmall`
     display: none;
