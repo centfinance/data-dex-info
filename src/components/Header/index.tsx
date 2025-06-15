@@ -3,6 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { darken } from 'polished'
 import styled from 'styled-components'
 import LogoDark from '../../assets/images/icon.svg'
+import DatadexIcon from '../../assets/images/datadex-icon.svg'
 import DatadexLogo from '../../assets/images/datadex-logo.svg'
 import Menu from '../Menu'
 import Row, { RowFixed, RowBetween } from '../Row'
@@ -79,10 +80,25 @@ const Title = styled(NavLink)`
 `
 
 const UniIcon = styled.div`
+  display: none;
   transition: all 0.2s ease;
   :hover {
     transform: rotate(-5deg);
   }
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    display: block;
+  `};
+`
+
+const UniLogo = styled.div`
+  display: block;
+  transition: all 0.2s ease;
+  :hover {
+    transform: rotate(-5deg);
+  }
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    display: none;
+  `};
 `
 
 const StyledNavLink = styled(NavLink)<{ $isActive: boolean }>`
@@ -155,8 +171,11 @@ export default function Header() {
     <HeaderFrame>
       <HeaderRow>
         <Title to={networkPrefix(activeNewtork)}>
-          <UniIcon>
+          <UniLogo>
             <img height={'36px'} src={DatadexLogo} alt="logo" />
+          </UniLogo>
+          <UniIcon>
+            <img width={'36px'} src={DatadexIcon} alt="logo" />
           </UniIcon>
         </Title>
         <HeaderLinks>
