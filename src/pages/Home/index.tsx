@@ -25,7 +25,7 @@ import { useTransformedVolumeData } from 'hooks/chart'
 import { SmallOptionButton } from 'components/Button'
 import { VolumeWindow } from 'types'
 import { Trace } from '@uniswap/analytics'
-import HeaderImage from '../../assets/images/header.webp'
+import HeaderImage from '../../assets/images/banner.svg'
 
 const ChartWrapper = styled.div`
   width: 49%;
