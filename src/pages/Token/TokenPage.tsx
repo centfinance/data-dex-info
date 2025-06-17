@@ -14,14 +14,14 @@ import { AutoColumn } from 'components/Column'
 import { RowBetween, RowFixed, AutoRow, RowFlat } from 'components/Row'
 import { TYPE, StyledInternalLink } from 'theme'
 import Loader, { LocalLoader } from 'components/Loader'
-import { ExternalLink, Download } from 'react-feather'
+import { ExternalLink, Download, X } from 'react-feather'
 import { ExternalLink as StyledExternalLink } from '../../theme/components'
 import useTheme from 'hooks/useTheme'
 import CurrencyLogo from 'components/CurrencyLogo'
 import { formatDollarAmount } from 'utils/numbers'
 import Percent from 'components/Percent'
 import { ButtonPrimary, ButtonGray, SavedIcon } from 'components/Button'
-import { DarkGreyCard, LightGreyCard } from 'components/Card'
+import { DarkGreyCard, DarkGreyCardNoPadding, LightGreyCard } from 'components/Card'
 import { usePoolDatas } from 'state/pools/hooks'
 import PoolTable from 'components/pools/PoolTable'
 import LineChart from 'components/LineChart/alt'
@@ -43,6 +43,7 @@ import CMCLogo from '../../assets/images/cmc.png'
 import { useParams } from 'react-router-dom'
 import { Trace } from '@uniswap/analytics'
 import { ChainId } from '@vanadex/sdk-core'
+import Modal from 'components/Modal'
 
 const PriceText = styled(TYPE.label)`
   font-size: 36px;
@@ -77,10 +78,98 @@ const StyledCMCLogo = styled.img`
   align-items: center;
 `
 
+const DexScreenerIframe = styled.iframe`
+  width: 100%;
+  height: 400px;
+  border: none;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.bg1};
+`
+
+const SectionHeader = styled(RowBetween)`
+  align-items: center;
+  margin-bottom: 16px;
+`
+
+const SmallToggleWrapper = styled(ToggleWrapper)`
+  width: 120px;
+`
+
+const TradeModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+`
+
+const TradeIframe = styled.iframe`
+  width: 100%;
+  height: 640px;
+  border: none;
+  min-height: 640px;
+  background: ${({ theme }) => theme.bg1};
+  flex: 1;
+`
+
+const ModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 16px 20px;
+`
+
+const HeaderIcons = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`
+
+const IconButton = styled.button`
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.text2};
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    color: ${({ theme }) => theme.text1};
+    background: ${({ theme }) => theme.bg2};
+  }
+`
+
+const ExternalLinkIcon = styled.a`
+  color: ${({ theme }) => theme.text2};
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    color: ${({ theme }) => theme.text1};
+    background: ${({ theme }) => theme.bg2};
+  }
+`
+
 enum ChartView {
   TVL,
   VOL,
   PRICE,
+}
+
+enum ChartSource {
+  NATIVE,
+  DEXSCREENER,
+}
+
+enum TransactionSource {
+  DEXSCREENER,
+  NATIVE,
 }
 
 const DEFAULT_TIME_WINDOW = TimeWindow.WEEK
@@ -141,6 +230,13 @@ export default function TokenPage() {
   const [valueLabel, setValueLabel] = useState<string | undefined>()
   const [timeWindow] = useState(DEFAULT_TIME_WINDOW)
 
+  // source toggles
+  const [chartSource, setChartSource] = useState(ChartSource.DEXSCREENER)
+  const [transactionSource, setTransactionSource] = useState(TransactionSource.DEXSCREENER)
+  
+  // trade modal state
+  const [showTradeModal, setShowTradeModal] = useState(false)
+
   // pricing data
   const priceData = useTokenPriceData(formattedAddress, ONE_HOUR_SECONDS, timeWindow)
   const adjustedToCurrent = useMemo(() => {
@@ -162,10 +258,17 @@ export default function TokenPage() {
   // watchlist
   const [savedTokens, addSavedToken] = useSavedTokens()
 
+  // DexScreener URLs
+  const dexscreenerChartUrl = `https://dexscreener.com/vana/${formattedAddress}?embed=1&theme=dark&trades=0&info=0`
+  const dexscreenerTransactionsUrl = `https://dexscreener.com/vana/${formattedAddress}?embed=1&theme=dark&chart=0&info=0`
+  
+  // Trade URLs
+  const swapIframeUrl = `https://www.datadex.com/#/swap?outputCurrency=${formattedAddress}`
+  const directSwapUrl = `https://www.datadex.com/#/swap?outputCurrency=${formattedAddress}`
+
   return (
     <Trace page="token-page" shouldLogImpression>
       <PageWrapper>
-        <ThemedBackground $backgroundColor={backgroundColor} />
         {tokenData ? (
           !tokenData.exists ? (
             <LightGreyCard style={{ textAlign: 'center' }}>
@@ -272,107 +375,210 @@ export default function TokenPage() {
                       <TYPE.main fontWeight={400}>24h Fees</TYPE.main>
                       <TYPE.label fontSize="24px">{formatDollarAmount(tokenData.feesUSD)}</TYPE.label>
                     </AutoColumn>
+                    <ButtonPrimary
+                      onClick={() => setShowTradeModal(true)}
+                      bgColor={backgroundColor}
+                      style={{ marginTop: '16px' }}
+                    >
+                      Trade
+                    </ButtonPrimary>
                   </AutoColumn>
                 </DarkGreyCard>
-                <DarkGreyCard>
-                  <RowBetween align="flex-start">
-                    <AutoColumn>
-                      <RowFixed>
-                        <TYPE.label fontSize="24px" height="30px">
-                          <MonoSpace>
-                            {latestValue
-                              ? formatDollarAmount(latestValue, 2)
-                              : view === ChartView.VOL
-                              ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
-                              : view === ChartView.TVL
-                              ? formatDollarAmount(formattedTvlData[formattedTvlData.length - 1]?.value)
-                              : formatDollarAmount(tokenData.priceUSD, 2)}
-                          </MonoSpace>
-                        </TYPE.label>
-                      </RowFixed>
-                      <TYPE.main height="20px" fontSize="12px">
-                        {valueLabel ? (
-                          <MonoSpace>{valueLabel} (UTC)</MonoSpace>
-                        ) : (
-                          <MonoSpace>{dayjs.utc().format('MMM D, YYYY')}</MonoSpace>
-                        )}
-                      </TYPE.main>
-                    </AutoColumn>
-                    <ToggleWrapper width="180px">
-                      <ToggleElementFree
-                        isActive={view === ChartView.VOL}
-                        fontSize="12px"
-                        onClick={() => (view === ChartView.VOL ? setView(ChartView.TVL) : setView(ChartView.VOL))}
-                      >
-                        Volume
-                      </ToggleElementFree>
-                      <ToggleElementFree
-                        isActive={view === ChartView.TVL}
-                        fontSize="12px"
-                        onClick={() => (view === ChartView.TVL ? setView(ChartView.PRICE) : setView(ChartView.TVL))}
-                      >
-                        TVL
-                      </ToggleElementFree>
-                      <ToggleElementFree
-                        isActive={view === ChartView.PRICE}
-                        fontSize="12px"
-                        onClick={() => setView(ChartView.PRICE)}
-                      >
-                        Price
-                      </ToggleElementFree>
-                    </ToggleWrapper>
-                  </RowBetween>
-                  {view === ChartView.TVL ? (
-                    <LineChart
-                      data={formattedTvlData}
-                      color={backgroundColor}
-                      minHeight={340}
-                      value={latestValue}
-                      label={valueLabel}
-                      setValue={setLatestValue}
-                      setLabel={setValueLabel}
-                    />
-                  ) : view === ChartView.VOL ? (
-                    <BarChart
-                      data={formattedVolumeData}
-                      color={backgroundColor}
-                      minHeight={340}
-                      value={latestValue}
-                      label={valueLabel}
-                      setValue={setLatestValue}
-                      setLabel={setValueLabel}
-                    />
-                  ) : view === ChartView.PRICE ? (
-                    adjustedToCurrent ? (
-                      <CandleChart
-                        data={adjustedToCurrent}
-                        setValue={setLatestValue}
-                        setLabel={setValueLabel}
-                        color={backgroundColor}
-                      />
+                <AutoColumn $gap="8px">
+                  <>
+                    <SectionHeader>
+                      <TYPE.main>Info</TYPE.main>
+                      <SmallToggleWrapper>
+                        <ToggleElementFree
+                          isActive={chartSource === ChartSource.DEXSCREENER}
+                          fontSize="12px"
+                          onClick={() => setChartSource(ChartSource.DEXSCREENER)}
+                        >
+                          Dex
+                        </ToggleElementFree>
+                        <ToggleElementFree
+                          isActive={chartSource === ChartSource.NATIVE}
+                          fontSize="12px"
+                          onClick={() => setChartSource(ChartSource.NATIVE)}
+                        >
+                          Native
+                        </ToggleElementFree>
+                      </SmallToggleWrapper>
+                    </SectionHeader>
+                    
+                    {(chartSource === ChartSource.DEXSCREENER) ? (
+                      <DarkGreyCardNoPadding>
+                        <DexScreenerIframe
+                          src={dexscreenerChartUrl}
+                          title="DexScreener Chart"
+                          sandbox="allow-scripts allow-same-origin"
+                        />
+                      </DarkGreyCardNoPadding>
                     ) : (
-                      <LocalLoader fill={false} />
-                    )
-                  ) : null}
-                </DarkGreyCard>
+                      <DarkGreyCard>
+                        <RowBetween align="flex-start">
+                          <AutoColumn>
+                            <RowFixed>
+                              <TYPE.label fontSize="24px" height="30px">
+                                {/* @ts-ignore */}
+                                <MonoSpace>
+                                  {latestValue
+                                    ? formatDollarAmount(latestValue, 2)
+                                    : view === ChartView.VOL
+                                      ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
+                                      : view === ChartView.TVL
+                                        ? formatDollarAmount(formattedTvlData[formattedTvlData.length - 1]?.value)
+                                        : formatDollarAmount(tokenData.priceUSD, 2)}
+                                </MonoSpace>
+                              </TYPE.label>
+                            </RowFixed>
+                            <TYPE.main height="20px" fontSize="12px">
+                              {/* @ts-ignore */}
+                              <>
+                                {/* @ts-ignore */}
+                                {valueLabel ? (
+                                  <MonoSpace>{valueLabel} (UTC)</MonoSpace>
+                                ) : (
+                                  <MonoSpace>{dayjs.utc().format('MMM D, YYYY')}</MonoSpace>
+                                )}
+                              </>
+                            </TYPE.main>
+                          </AutoColumn>
+                          <AutoColumn $gap="8px">
+                            <ToggleWrapper width="180px">
+                              <ToggleElementFree
+                                isActive={view === ChartView.VOL}
+                                fontSize="12px"
+                                onClick={() => (view === ChartView.VOL ? setView(ChartView.TVL) : setView(ChartView.VOL))}
+                              >
+                                Volume
+                              </ToggleElementFree>
+                              <ToggleElementFree
+                                isActive={view === ChartView.TVL}
+                                fontSize="12px"
+                                onClick={() => (view === ChartView.TVL ? setView(ChartView.PRICE) : setView(ChartView.TVL))}
+                              >
+                                TVL
+                              </ToggleElementFree>
+                              <ToggleElementFree
+                                isActive={view === ChartView.PRICE}
+                                fontSize="12px"
+                                onClick={() => setView(ChartView.PRICE)}
+                              >
+                                Price
+                              </ToggleElementFree>
+                            </ToggleWrapper>
+                          </AutoColumn>
+                        </RowBetween>
+                        {view === ChartView.TVL ? (
+                          <LineChart
+                            data={formattedTvlData}
+                            color={backgroundColor}
+                            minHeight={340}
+                            value={latestValue}
+                            label={valueLabel}
+                            setValue={setLatestValue}
+                            setLabel={setValueLabel}
+                          />
+                        ) : view === ChartView.VOL ? (
+                          <BarChart
+                            data={formattedVolumeData}
+                            color={backgroundColor}
+                            minHeight={340}
+                            value={latestValue}
+                            label={valueLabel}
+                            setValue={setLatestValue}
+                            setLabel={setValueLabel}
+                          />
+                        ) : view === ChartView.PRICE ? (
+                          adjustedToCurrent ? (
+                            <CandleChart
+                              data={adjustedToCurrent}
+                              setValue={setLatestValue}
+                              setLabel={setValueLabel}
+                              color={backgroundColor}
+                            />
+                          ) : (
+                            <LocalLoader fill={false} />
+                          )
+                        ) : null}
+                      </DarkGreyCard>
+                    )}
+                  </>
+                </AutoColumn>
               </ContentLayout>
               <TYPE.main>Pools</TYPE.main>
               <DarkGreyCard>
                 <PoolTable poolDatas={poolDatas} />
               </DarkGreyCard>
-              <TYPE.main>Transactions</TYPE.main>
-              <DarkGreyCard>
-                {transactions ? (
-                  <TransactionTable transactions={transactions} color={backgroundColor} />
-                ) : (
-                  <LocalLoader fill={false} />
-                )}
-              </DarkGreyCard>
+              <SectionHeader>
+                <TYPE.main>Transactions</TYPE.main>
+                <SmallToggleWrapper>
+                  <ToggleElementFree
+                    isActive={transactionSource === TransactionSource.DEXSCREENER}
+                    fontSize="12px"
+                    onClick={() => setTransactionSource(TransactionSource.DEXSCREENER)}
+                  >
+                    Dex
+                  </ToggleElementFree>
+                  <ToggleElementFree
+                    isActive={transactionSource === TransactionSource.NATIVE}
+                    fontSize="12px"
+                    onClick={() => setTransactionSource(TransactionSource.NATIVE)}
+                  >
+                    Native
+                  </ToggleElementFree>
+                </SmallToggleWrapper>
+              </SectionHeader>
+              {transactionSource === TransactionSource.DEXSCREENER ? (
+                <DarkGreyCardNoPadding>
+                  <DexScreenerIframe
+                    src={dexscreenerTransactionsUrl}
+                    title="DexScreener Transactions"
+                    sandbox="allow-scripts allow-same-origin"
+                  />
+                </DarkGreyCardNoPadding>
+              ) : (
+                <DarkGreyCard>
+                  {transactions ? (
+                    <TransactionTable transactions={transactions} color={backgroundColor} />
+                  ) : (
+                    <LocalLoader fill={false} />
+                  )}
+                </DarkGreyCard>
+              )}
             </AutoColumn>
           )
         ) : (
           <Loader />
         )}
+        
+        {/* Trade Modal */}
+        <Modal isOpen={showTradeModal} onDismiss={() => setShowTradeModal(false)} maxWidth={`480px`}>
+          <TradeModalContent>
+            <ModalHeader>
+              <TYPE.mediumHeader>Trade {tokenData?.symbol}</TYPE.mediumHeader>
+              <HeaderIcons>
+                <ExternalLinkIcon
+                  href={directSwapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink size={20} />
+                </ExternalLinkIcon>
+                <IconButton onClick={() => setShowTradeModal(false)}>
+                  <X size={20} />
+                </IconButton>
+              </HeaderIcons>
+            </ModalHeader>
+            
+            <TradeIframe
+              src={swapIframeUrl}
+              title="Datadex Swap"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+            />
+          </TradeModalContent>
+        </Modal>
       </PageWrapper>
     </Trace>
   )

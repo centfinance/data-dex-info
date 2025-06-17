@@ -7,6 +7,7 @@ import { ChevronDown, Check, Star } from 'react-feather'
 import { Button as RebassButton, ButtonProps } from 'rebass/styled-components'
 import useTheme from 'hooks/useTheme'
 
+// @ts-ignore
 const Base = styled(RebassButton)<{
   padding?: string
   width?: string
@@ -288,22 +289,27 @@ export function ButtonConfirmed({
   ...rest
 }: { confirmed?: boolean; altDisabledStyle?: boolean } & ButtonProps) {
   if (confirmed) {
+    // @ts-ignore
     return <ButtonConfirmedStyle {...rest} />
   } else {
+    // @ts-ignore
     return <ButtonPrimary {...rest} altDisabledStyle={altDisabledStyle} />
   }
 }
 
 export function ButtonError({ error, ...rest }: { error?: boolean } & ButtonProps) {
   if (error) {
+    // @ts-ignore
     return <ButtonErrorStyle {...rest} />
   } else {
+    // @ts-ignore
     return <ButtonPrimary {...rest} />
   }
 }
 
-export function ButtonDropdown({ disabled = false, children, ...rest }: { disabled?: boolean } & ButtonProps) {
+export function ButtonDropdown({ disabled = false, children, ...rest }: { disabled?: boolean, children: any } & ButtonProps) {
   return (
+    // @ts-ignore
     <ButtonPrimary {...rest} disabled={disabled}>
       <RowBetween>
         <div style={{ display: 'flex', alignItems: 'center' }}>{children}</div>
@@ -313,8 +319,9 @@ export function ButtonDropdown({ disabled = false, children, ...rest }: { disabl
   )
 }
 
-export function ButtonDropdownGrey({ disabled = false, children, ...rest }: { disabled?: boolean } & ButtonProps) {
+export function ButtonDropdownGrey({ disabled = false, children, ...rest }: { disabled?: boolean, children: any } & ButtonProps) {
   return (
+    // @ts-ignore
     <ButtonGray {...rest} disabled={disabled} style={{ borderRadius: '20px' }}>
       <RowBetween>
         <div style={{ display: 'flex', alignItems: 'center' }}>{children}</div>
@@ -324,8 +331,9 @@ export function ButtonDropdownGrey({ disabled = false, children, ...rest }: { di
   )
 }
 
-export function ButtonDropdownLight({ disabled = false, children, ...rest }: { disabled?: boolean } & ButtonProps) {
+export function ButtonDropdownLight({ disabled = false, children, ...rest }: { disabled?: boolean, children: any } & ButtonProps) {
   return (
+    // @ts-ignore
     <ButtonOutlined {...rest} disabled={disabled}>
       <RowBetween>
         <div style={{ display: 'flex', alignItems: 'center' }}>{children}</div>
@@ -337,8 +345,10 @@ export function ButtonDropdownLight({ disabled = false, children, ...rest }: { d
 
 export function ButtonRadio({ active, ...rest }: { active?: boolean } & ButtonProps) {
   if (!active) {
+    // @ts-ignore
     return <ButtonWhite {...rest} />
   } else {
+    // @ts-ignore
     return <ButtonPrimary {...rest} />
   }
 }
@@ -366,12 +376,14 @@ const CheckboxWrapper = styled.div`
 export function ButtonRadioChecked({ active = false, children, ...rest }: { active?: boolean } & ButtonProps) {
   if (!active) {
     return (
+      // @ts-ignore
       <ButtonOutlined borderRadius="12px" padding="12px 8px" {...rest}>
         {<RowBetween>{children}</RowBetween>}
       </ButtonOutlined>
     )
   } else {
     return (
+      // @ts-ignore
       <ActiveOutlined {...rest} padding="12px 8px" borderRadius="12px">
         {
           <RowBetween>

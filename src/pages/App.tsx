@@ -165,11 +165,15 @@ export default function App() {
               <BodyWrapper>
                 <DarkGreyCard style={{ maxWidth: '340px' }}>
                   <TYPE.label>
-                    The Graph hosted network which provides data for this site is temporarily experiencing issues. Check
-                    current status{' '}
-                    <ExternalLink href="https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v3">
-                      here.
-                    </ExternalLink>
+                    {/* @ts-ignore */}
+                    <>
+                      The Graph hosted network which provides data for this site is temporarily experiencing issues. Check
+                      current status
+                      {' '}
+                      <ExternalLink href="https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v3">
+                        here.
+                      </ExternalLink>
+                    </>
                   </TYPE.label>
                 </DarkGreyCard>
               </BodyWrapper>

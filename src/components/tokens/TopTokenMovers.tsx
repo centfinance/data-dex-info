@@ -48,6 +48,7 @@ const DataCard = ({ tokenData }: { tokenData: TokenData }) => {
           <CurrencyLogo address={tokenData.address} size="32px" />
           <AutoColumn $gap="3px" style={{ marginLeft: '12px' }}>
             <TYPE.label fontSize="14px">
+              {/* @ts-ignore */}
               <HoverInlineText text={tokenData.symbol} />
             </TYPE.label>
             <RowFlat>

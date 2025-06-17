@@ -25,6 +25,7 @@ import { useTransformedVolumeData } from 'hooks/chart'
 import { SmallOptionButton } from 'components/Button'
 import { VolumeWindow } from 'types'
 import { Trace } from '@uniswap/analytics'
+import HeaderImage from '../../assets/images/banner.svg'
 
 const ChartWrapper = styled.div`
   width: 49%;
@@ -161,126 +162,10 @@ export default function Home() {
   return (
     <Trace page={'home-page'} shouldLogImpression>
       <PageWrapper>
-        <ThemedBackgroundGlobal $backgroundColor={activeNetwork.bgColor} />
         <AutoColumn $gap="16px">
+          <img src={HeaderImage} alt="Data DEX Header" style={{ width: '100%' }} />
+
           <TYPE.main>Data DEX Overview</TYPE.main>
-          <ResponsiveRow>
-            <ChartWrapper>
-              <LineChart
-                data={formattedTvlData}
-                height={220}
-                minHeight={332}
-                color={activeNetwork.primaryColor}
-                value={liquidityHover}
-                label={leftLabel}
-                setValue={useCallback(
-                  (val: React.SetStateAction<number | undefined>) => {
-                    const newValue = typeof val === 'function' ? val(liquidityHoverRef.current) : val
-                    if (newValue === undefined && protocolData) {
-                      // Reset to default value
-                      liquidityHoverRef.current = protocolData.tvlUSD
-                      requestAnimationFrame(() => setLiquidityHover(protocolData.tvlUSD))
-                    } else if (liquidityHoverRef.current !== newValue) {
-                      liquidityHoverRef.current = newValue
-                      requestAnimationFrame(() => setLiquidityHover(newValue))
-                    }
-                  },
-                  [protocolData],
-                )}
-                setLabel={useCallback((val: React.SetStateAction<string | undefined>) => {
-                  const newValue = typeof val === 'function' ? val(leftLabelRef.current) : val
-                  if (leftLabelRef.current !== newValue) {
-                    leftLabelRef.current = newValue
-                    requestAnimationFrame(() => setLeftLabel(newValue))
-                  }
-                }, [])}
-                topLeft={
-                  <AutoColumn $gap="4px">
-                    <TYPE.mediumHeader fontSize="16px">TVL</TYPE.mediumHeader>
-                    <TYPE.largeHeader fontSize="32px">
-                      <MonoSpace>{tvlValue} </MonoSpace>
-                    </TYPE.largeHeader>
-                    <TYPE.main fontSize="12px" height="14px">
-                      {leftLabel ? <MonoSpace>{leftLabel} (UTC)</MonoSpace> : null}
-                    </TYPE.main>
-                  </AutoColumn>
-                }
-              />
-            </ChartWrapper>
-            <ChartWrapper>
-              <BarChart
-                height={220}
-                minHeight={332}
-                data={
-                  volumeWindow === VolumeWindow.monthly
-                    ? monthlyVolumeData
-                    : volumeWindow === VolumeWindow.weekly
-                    ? weeklyVolumeData
-                    : formattedVolumeData
-                }
-                color={theme?.blue1}
-                setValue={useCallback(
-                  (val: React.SetStateAction<number | undefined>) => {
-                    const newValue = typeof val === 'function' ? val(volumeHoverRef.current) : val
-                    if (newValue === undefined && protocolData) {
-                      // Reset to default value
-                      volumeHoverRef.current = protocolData.volumeUSD
-                      requestAnimationFrame(() => setVolumeHover(protocolData.volumeUSD))
-                    } else if (volumeHoverRef.current !== newValue) {
-                      volumeHoverRef.current = newValue
-                      requestAnimationFrame(() => setVolumeHover(newValue))
-                    }
-                  },
-                  [protocolData],
-                )}
-                setLabel={useCallback((val: React.SetStateAction<string | undefined>) => {
-                  const newValue = typeof val === 'function' ? val(rightLabelRef.current) : val
-                  if (rightLabelRef.current !== newValue) {
-                    rightLabelRef.current = newValue
-                    requestAnimationFrame(() => setRightLabel(newValue))
-                  }
-                }, [])}
-                value={volumeHover}
-                label={rightLabel}
-                activeWindow={volumeWindow}
-                topRight={
-                  <RowFixed style={{ marginLeft: '-40px', marginTop: '8px' }}>
-                    <SmallOptionButton
-                      $active={volumeWindow === VolumeWindow.daily}
-                      onClick={() => setVolumeWindow(VolumeWindow.daily)}
-                    >
-                      D
-                    </SmallOptionButton>
-                    <SmallOptionButton
-                      $active={volumeWindow === VolumeWindow.weekly}
-                      style={{ marginLeft: '8px' }}
-                      onClick={() => setVolumeWindow(VolumeWindow.weekly)}
-                    >
-                      W
-                    </SmallOptionButton>
-                    <SmallOptionButton
-                      $active={volumeWindow === VolumeWindow.monthly}
-                      style={{ marginLeft: '8px' }}
-                      onClick={() => setVolumeWindow(VolumeWindow.monthly)}
-                    >
-                      M
-                    </SmallOptionButton>
-                  </RowFixed>
-                }
-                topLeft={
-                  <AutoColumn $gap="4px">
-                    <TYPE.mediumHeader fontSize="16px">Volume 24H</TYPE.mediumHeader>
-                    <TYPE.largeHeader fontSize="32px">
-                      <MonoSpace>{volumeValue}</MonoSpace>
-                    </TYPE.largeHeader>
-                    <TYPE.main fontSize="12px" height="14px">
-                      {rightLabel ? <MonoSpace>{rightLabel} (UTC)</MonoSpace> : null}
-                    </TYPE.main>
-                  </AutoColumn>
-                }
-              />
-            </ChartWrapper>
-          </ResponsiveRow>
           <HideSmall>
             <DarkGreyCard>
               <RowBetween>
@@ -317,10 +202,6 @@ export default function Home() {
             <StyledInternalLink to="pools">Explore</StyledInternalLink>
           </RowBetween>
           <PoolTable poolDatas={poolDatas} />
-          <RowBetween>
-            <TYPE.main>Transactions</TYPE.main>
-          </RowBetween>
-          {transactions ? <TransactionsTable transactions={transactions} color={activeNetwork.primaryColor} /> : null}
         </AutoColumn>
       </PageWrapper>
     </Trace>

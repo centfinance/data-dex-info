@@ -2,7 +2,9 @@ import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { darken } from 'polished'
 import styled from 'styled-components'
-import LogoDark from '../../assets/svg/vana-logo-white.svg'
+import LogoDark from '../../assets/images/icon.svg'
+import DatadexIcon from '../../assets/images/datadex-icon.svg'
+import DatadexLogo from '../../assets/images/datadex-logo.svg'
 import Menu from '../Menu'
 import Row, { RowFixed, RowBetween } from '../Row'
 import SearchSmall from 'components/Search'
@@ -21,12 +23,8 @@ const HeaderFrame = styled.div`
   width: 100%;
   top: 0;
   position: relative;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding: 1rem;
   z-index: 2;
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.12),
-    0 1px 2px rgba(0, 0, 0, 0.24);
 
   background-color: ${({ theme }) => theme.bg0};
 
@@ -82,10 +80,25 @@ const Title = styled(NavLink)`
 `
 
 const UniIcon = styled.div`
-  transition: transform 0.3s ease;
+  display: none;
+  transition: all 0.2s ease;
   :hover {
     transform: rotate(-5deg);
   }
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    display: block;
+  `};
+`
+
+const UniLogo = styled.div`
+  display: block;
+  transition: all 0.2s ease;
+  :hover {
+    transform: rotate(-2deg);
+  }
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    display: none;
+  `};
 `
 
 const StyledNavLink = styled(NavLink)<{ $isActive: boolean }>`
@@ -102,8 +115,8 @@ const StyledNavLink = styled(NavLink)<{ $isActive: boolean }>`
   font-weight: 500;
 
   border-radius: ${({ $isActive }) => ($isActive ? '12px' : 'unset')};
-  background-color: ${({ theme, $isActive }) => ($isActive ? theme.bg2 : 'unset')};
-  color: ${({ theme, $isActive }) => ($isActive ? theme.text1 : theme.text3)};
+  background-color: ${({ theme, $isActive }) => ($isActive ? `#0000ff` : 'unset')};
+  color: ${({ theme, $isActive }) => ($isActive ? theme.text1 : theme.text2)};
 
   :hover,
   :focus {
@@ -158,8 +171,11 @@ export default function Header() {
     <HeaderFrame>
       <HeaderRow>
         <Title to={networkPrefix(activeNewtork)}>
+          <UniLogo>
+            <img height={'36px'} src={DatadexLogo} alt="logo" />
+          </UniLogo>
           <UniIcon>
-            <img width={'36px'} src={LogoDark} alt="logo" />
+            <img width={'36px'} src={DatadexIcon} alt="logo" />
           </UniIcon>
         </Title>
         <HeaderLinks>

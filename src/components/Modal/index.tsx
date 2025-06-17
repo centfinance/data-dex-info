@@ -32,6 +32,7 @@ const StyledDialogContent = styled(AnimatedDialogContent)<{
   maxHeight: number
   mobile: boolean
   isOpen?: boolean
+  maxWidth?: number | string
 }>`
   overflow-y: ${({ mobile }) => (mobile ? 'scroll' : 'hidden')};
 
@@ -46,7 +47,7 @@ const StyledDialogContent = styled(AnimatedDialogContent)<{
 
     align-self: ${({ mobile }) => (mobile ? 'flex-end' : 'center')};
 
-    max-width: 420px;
+    max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : '420px')};
     ${({ maxHeight }) =>
       maxHeight &&
       css`
@@ -83,6 +84,7 @@ interface ModalProps {
   onDismiss: () => void
   minHeight?: number | false
   maxHeight?: number
+  maxWidth?: number | string
   initialFocusRef?: React.RefObject<any>
   children?: React.ReactNode
 }

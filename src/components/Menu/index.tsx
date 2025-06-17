@@ -81,7 +81,7 @@ const MenuItem = styled(ExternalLink)`
   }
 `
 
-const CODE_LINK = 'https://github.com/centfinance/datadex-info'
+const CODE_LINK = 'https://github.com/vana-com/datadex-info/tree/feat/new-ui'
 
 export default function Menu() {
   const node = useRef<HTMLDivElement>(null)
@@ -101,7 +101,7 @@ export default function Menu() {
             <Info size={14} />
             About
           </MenuItem>
-          <MenuItem id="link" href="https://docs.datadex.me/">
+          <MenuItem id="link" href="https://docs.datadex.com/">
             <BookOpen size={14} />
             Docs
           </MenuItem>

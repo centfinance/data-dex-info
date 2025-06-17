@@ -26,11 +26,18 @@ const ResponsiveGrid = styled.div`
   grid-gap: 1em;
   align-items: center;
 
-  grid-template-columns: 20px 3.5fr repeat(3, 1fr);
+  grid-template-columns: 20px 3.5fr repeat(4, 1fr);
 
   @media screen and (max-width: 900px) {
-    grid-template-columns: 20px 1.5fr repeat(2, 1fr);
+    grid-template-columns: 20px 1.5fr repeat(3, 1fr);
     & :nth-child(3) {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    grid-template-columns: 20px 1.5fr repeat(2, 1fr);
+    & :nth-child(4) {
       display: none;
     }
   }
@@ -62,17 +69,39 @@ const SORT_FIELD = {
   feeTier: 'feeTier',
   volumeUSD: 'volumeUSD',
   tvlUSD: 'tvlUSD',
-  volumeUSDWeek: 'volumeUSDWeek',
+  apy: 'apy',
+  fees24h: 'fees24h',
+}
+
+// Helper functions for calculations
+const calculate24hFees = (volumeUSD: number, feeTier: number): number => {
+  return volumeUSD * (feeTier / 1000000)
+}
+
+const calculateAPY = (volumeUSD: number, feeTier: number, tvlUSD: number): number => {
+  if (tvlUSD === 0) return 0
+  const dailyFees = calculate24hFees(volumeUSD, feeTier)
+  return (dailyFees * 365) / tvlUSD * 100
+}
+
+const formatPercentage = (value: number): string => {
+  if (value === 0) return '0%'
+  if (value < 0.01) return '<0.01%'
+  return `${value.toFixed(2)}%`
 }
 
 const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => {
   const [activeNetwork] = useActiveNetworkVersion()
+  
+  const fees24h = calculate24hFees(poolData.volumeUSD, poolData.feeTier)
+  const apy = calculateAPY(poolData.volumeUSD, poolData.feeTier, poolData.tvlUSD)
 
   return (
     <LinkWrapper to={networkPrefix(activeNetwork) + 'pools/' + poolData.address}>
       <ResponsiveGrid>
         <Label fontWeight={400}>{index + 1}</Label>
         <Label fontWeight={400}>
+          {/* @ts-ignore */}
           <RowFixed>
             <DoubleCurrencyLogo address0={poolData.token0.address} address1={poolData.token1.address} />
             <TYPE.label ml="8px">
@@ -84,13 +113,16 @@ const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => 
           </RowFixed>
         </Label>
         <Label end={1} fontWeight={400}>
-          {formatDollarAmount(poolData.tvlUSD)}
+          {formatPercentage(apy)}
+        </Label>
+        <Label end={1} fontWeight={400}>
+          {formatDollarAmount(fees24h)}
         </Label>
         <Label end={1} fontWeight={400}>
           {formatDollarAmount(poolData.volumeUSD)}
         </Label>
         <Label end={1} fontWeight={400}>
-          {formatDollarAmount(poolData.volumeUSDWeek)}
+          {formatDollarAmount(poolData.tvlUSD)}
         </Label>
       </ResponsiveGrid>
     </LinkWrapper>
@@ -126,7 +158,21 @@ export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDat
           .filter((x) => !!x && POOL_ALLOW_LIST[currentNetwork.id].includes(x.address))
           .sort((a, b) => {
             if (a && b) {
-              return a[sortField as keyof PoolData] > b[sortField as keyof PoolData]
+              let aValue: number, bValue: number
+              
+              // Handle special calculated fields
+              if (sortField === SORT_FIELD.apy) {
+                aValue = calculateAPY(a.volumeUSD, a.feeTier, a.tvlUSD)
+                bValue = calculateAPY(b.volumeUSD, b.feeTier, b.tvlUSD)
+              } else if (sortField === SORT_FIELD.fees24h) {
+                aValue = calculate24hFees(a.volumeUSD, a.feeTier)
+                bValue = calculate24hFees(b.volumeUSD, b.feeTier)
+              } else {
+                aValue = a[sortField as keyof PoolData] as number
+                bValue = b[sortField as keyof PoolData] as number
+              }
+              
+              return aValue > bValue
                 ? (sortDirection ? -1 : 1) * 1
                 : (sortDirection ? -1 : 1) * -1
             } else {
@@ -165,14 +211,17 @@ export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDat
             <ClickableText color={theme?.text2} onClick={() => handleSort(SORT_FIELD.feeTier)}>
               Pool {arrow(SORT_FIELD.feeTier)}
             </ClickableText>
-            <ClickableText color={theme?.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
-              TVL {arrow(SORT_FIELD.tvlUSD)}
+            <ClickableText color={theme?.text2} end={1} onClick={() => handleSort(SORT_FIELD.apy)}>
+              APY {arrow(SORT_FIELD.apy)}
+            </ClickableText>
+            <ClickableText color={theme?.text2} end={1} onClick={() => handleSort(SORT_FIELD.fees24h)}>
+              Fees 24H {arrow(SORT_FIELD.fees24h)}
             </ClickableText>
             <ClickableText color={theme?.text2} end={1} onClick={() => handleSort(SORT_FIELD.volumeUSD)}>
               Volume 24H {arrow(SORT_FIELD.volumeUSD)}
             </ClickableText>
-            <ClickableText color={theme?.text2} end={1} onClick={() => handleSort(SORT_FIELD.volumeUSDWeek)}>
-              Volume 7D {arrow(SORT_FIELD.volumeUSDWeek)}
+            <ClickableText color={theme?.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
+              TVL {arrow(SORT_FIELD.tvlUSD)}
             </ClickableText>
           </ResponsiveGrid>
           <Break />

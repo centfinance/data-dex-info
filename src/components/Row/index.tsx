@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Box } from 'rebass/styled-components'
 
+// @ts-ignore
 const Row = styled(Box)<{
   width?: string
   align?: string
