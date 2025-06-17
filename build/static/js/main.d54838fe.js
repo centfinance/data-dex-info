@@ -46164,7 +46164,7 @@
             return e.theme.text1
           },
         ),
-        ts = 'https://github.com/centfinance/datadex-info'
+        ts = 'https://github.com/vana-com/datadex-info/tree/feat/new-ui'
       function ns() {
         var e = (0, t.useRef)(null),
           n = D((0, t.useState)(!1), 2),
@@ -46200,7 +46200,7 @@
                     }),
                     (0, Io.jsxs)(es, {
                       id: 'link',
-                      href: 'https://docs.datadex.me/',
+                      href: 'https://docs.datadex.com/',
                       children: [(0, Io.jsx)(br, { size: 14 }), 'Docs'],
                     }),
                     (0, Io.jsxs)(es, { id: 'link', href: ts, children: [(0, Io.jsx)(_r, { size: 14 }), 'Github'] }),
@@ -87198,7 +87198,7 @@
                   $gap: '6px',
                   style: { justifyContent: 'flex-end' },
                   children: [
-                    (0, Io.jsx)(KH, { href: 'https://docs.datadex.me/', children: 'Docs' }),
+                    (0, Io.jsx)(KH, { href: 'https://docs.datadex.com/', children: 'Docs' }),
                     (0, Io.jsx)(KH, { href: 'https://datadex.com', children: 'App' }),
                   ],
                 }),

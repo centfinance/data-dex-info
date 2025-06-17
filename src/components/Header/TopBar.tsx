@@ -47,7 +47,7 @@ const TopBar = () => {
           </RowFixed>
         </AutoRow>
         <AutoRow $gap="6px" style={{ justifyContent: 'flex-end' }}>
-          <StyledLink href="https://docs.datadex.me/">Docs</StyledLink>
+          <StyledLink href="https://docs.datadex.com/">Docs</StyledLink>
           <StyledLink href="https://datadex.com">App</StyledLink>
         </AutoRow>
       </RowBetween>
