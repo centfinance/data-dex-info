@@ -14,9 +14,11 @@ An open-source analytics interface for **VANA** token markets, forked and adapte
   
 
 3. Install Dependencies
+   ```bash
    yarn
 
 3. Run the App
+   ```bash
    yarn start
   (The app should now be running at http://localhost:3000)
 
