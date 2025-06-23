@@ -41,7 +41,24 @@ Please open all pull requests against the main branch.
 CI checks will automatically run for all PRs. Ensure your changes pass before requesting a review.
 
 ---
-🌐 About
+
+🛡 License
+
+This project is licensed under GPL-3.0.
+
+🙌 Acknowledgements
+
+This interface is based on the amazing work of Uniswap Labs. We thank them for making the original version open source.
+
+---
+
+🌐 Learn More
+
+Main Site: https://datadex.com
+
+Analytics Dashboard: https://info.datadex.com/#/vana
+
+Tokenlist Repo: https://github.com/vanadatadex/tokenlist
 
 DataDex is building a unified interface to explore data-backed tokens across decentralized networks. The VANA dashboard is one of the first modules powered by both on-chain and off-chain data.
 
