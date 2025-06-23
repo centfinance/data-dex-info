@@ -64,6 +64,7 @@ export const TOKEN_ALLOW_LIST: { [key: string]: string[] } = {
     '0xfb41a4a2d2aff36d42b7388ad666dda43f6c923f', //vCHARS AI
     '0x202f120c83dcfce04a1723ae7ec7cdbd2ed73302', //WWW
     '0x17ba7a5603fdd6f07a1da23c843e16e60987c7f7', // BOPS
+    '0xad881d0f795b07daad6a23389d5ab8fc596c1eaf', // REM
   ],
   [SupportedNetwork.VANA_MOKSHA]: [
     '0xb39a50b5806039c82932bb96cefbcbc61231045c', // USDC
@@ -129,6 +130,7 @@ export const POOL_ALLOW_LIST: { [key: string]: string[] } = {
     '0xab70e2787b1171d244f1e02a58bd66414f03f63c', //vCHARS AI
     '0xac51287b6cf7fe5bacbf4130406cce6e256b835b', // WWW
     '0xd71289724d6cf091fb2d64999e9384e75515b401', // BOPS
+    '0x8f91a6dbcf37e7e8524603f1174feb073a1dd1f4', // REM
   ],
   [SupportedNetwork.VANA_MOKSHA]: [],
 }
