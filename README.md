@@ -24,6 +24,7 @@ An open-source analytics interface for **VANA** token markets, forked and adapte
 
 ---
 📁 Structure
+
 This project is based on Uniswap V3’s analytics frontend but customized to support VANA pair data via our CMS and subgraph.
 
 src/pages/vana/ – Custom VANA dashboard components
@@ -34,12 +35,14 @@ src/lib/subgraph/ – GraphQL queries for on-chain analytics
 
 ---
 🤝 Contributions
+
 Please open all pull requests against the main branch.
 
 CI checks will automatically run for all PRs. Ensure your changes pass before requesting a review.
 
 ---
 🌐 About
+
 DataDex is building a unified interface to explore data-backed tokens across decentralized networks. The VANA dashboard is one of the first modules powered by both on-chain and off-chain data.
 
 For questions, reach out via https://datadex.com or open an issue.
