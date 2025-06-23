@@ -9,7 +9,7 @@ An open-source analytics interface for **VANA** token markets, forked and adapte
 
 1. Clone the Repo
    ```bash
-   git clone https://github.com/centfinance/data-dex-info.git
+   git clone https://github.com/vanadatadex/data-dex-info.git
    cd data-dex-info
   
 
