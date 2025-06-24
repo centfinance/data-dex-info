@@ -2,9 +2,7 @@
 import { sanityClient } from './client'
 
 export async function fetchTokenDescription(tokenAddress: string) {
-  const query = `*[_type == "dataDAO" && lower(tokenAddress) == $tokenAddress][0]{
-    description
-  }`
+  const query = `*[_type == "token" && lower(tokenContract) == $tokenAddress][0]{ description }`
 
   const params = { tokenAddress: tokenAddress.toLowerCase() }
 

@@ -13,6 +13,5 @@ export const sanityClient = createClient({
   apiVersion: '2023-06-01',          // Use a pinned API version or 'v2025-06-20' to match Vision
   
   // Read-only or write-enabled token
-  token: (import.meta as ImportMeta).env.VITE_SANITY_AUTH_TOKEN,
-
+  token: import.meta.env.VITE_SANITY_AUTH_TOKEN,
 })
