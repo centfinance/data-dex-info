@@ -1,7 +1,9 @@
 {
   "files": {
-    "main.css": "./static/css/main.6f455bb3.css",
-    "main.js": "./static/js/main.bddcc99d.js",
+    "main.css": "./static/css/main.08725f2c.css",
+    "main.js": "./static/js/main.1ca7acb6.js",
+    "static/js/796.d9479a1c.chunk.js": "./static/js/796.d9479a1c.chunk.js",
+    "static/js/165.ea8a2b05.chunk.js": "./static/js/165.ea8a2b05.chunk.js",
     "static/media/Inter.var.woff2?v=3.19": "./static/media/Inter.var.c2fe3cb2b7c746f7966a.woff2",
     "static/media/Inter-italic.var.woff2?v=3.19": "./static/media/Inter-italic.var.30807be7abc48ba8c73c.woff2",
     "static/media/Inter-roman.var.woff2?v=3.19": "./static/media/Inter-roman.var.ba4caefcdf5b36b438db.woff2",
@@ -54,10 +56,14 @@
     "index.html": "./index.html",
     "static/media/menu.svg": "./static/media/menu.79681e1fce984681ebcb77a55d52d4de.svg",
     "static/media/celo-logo.svg": "./static/media/celo-logo.e95fad7be41e27771a1729f111f11ec9.svg",
-    "static/media/base-logo.svg": "./static/media/base-logo.15508bb9fe67ed9cd096c8a47c108702.svg"
+    "static/media/base-logo.svg": "./static/media/base-logo.15508bb9fe67ed9cd096c8a47c108702.svg",
+    "main.08725f2c.css.map": "./static/css/main.08725f2c.css.map",
+    "main.1ca7acb6.js.map": "./static/js/main.1ca7acb6.js.map",
+    "796.d9479a1c.chunk.js.map": "./static/js/796.d9479a1c.chunk.js.map",
+    "165.ea8a2b05.chunk.js.map": "./static/js/165.ea8a2b05.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.6f455bb3.css",
-    "static/js/main.bddcc99d.js"
+    "static/css/main.08725f2c.css",
+    "static/js/main.1ca7acb6.js"
   ]
 }
