@@ -48,6 +48,7 @@ export const TOKEN_ALLOW_LIST: { [key: string]: string[] } = {
   [SupportedNetwork.BNB]: [],
   [SupportedNetwork.AVALANCHE]: [],
   [SupportedNetwork.BASE]: [],
+  //address must be lower case
   [SupportedNetwork.VANA]: [
     '0xf1815bd50389c46847f0bda824ec8da914045d14', //USDC.e
     '0x0d32e3b41e0dbb17192b6b0d26ef018d31f175b5', // GPT
@@ -67,6 +68,7 @@ export const TOKEN_ALLOW_LIST: { [key: string]: string[] } = {
     '0xad881d0f795b07daad6a23389d5ab8fc596c1eaf', // REM
     '0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590', //WETH
   ],
+  //address must be lower case
   [SupportedNetwork.VANA_MOKSHA]: [
     '0xb39a50b5806039c82932bb96cefbcbc61231045c', // USDC
     '0x01079c78199e05d44bbff9e50dbdf765489f16e1', // USDT
@@ -115,6 +117,7 @@ export const POOL_ALLOW_LIST: { [key: string]: string[] } = {
   [SupportedNetwork.BNB]: [],
   [SupportedNetwork.AVALANCHE]: [],
   [SupportedNetwork.BASE]: [],
+  //address must be lower case
   [SupportedNetwork.VANA]: [
     '0x850e454ddebf9f61ef5a86a032c857e0e47c4fa9',
     '0xe21b165bcd93251b71db4a55e4e8f234b3391d74',
