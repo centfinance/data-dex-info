@@ -50,7 +50,7 @@ export const TOKEN_ALLOW_LIST: { [key: string]: string[] } = {
   [SupportedNetwork.BASE]: [],
   [SupportedNetwork.VANA]: [
     '0xf1815bd50389c46847f0bda824ec8da914045d14', //USDC.e
-    '0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590', //WETH
+    '0x0D32E3B41E0Dbb17192b6b0d26Ef018d31f175b5', // GPT
     '0x00eddd9621fb08436d0331c149d1690909a5906d', //WVANA
     '0xf23e379b2fd945f8c0a4f410cb6ef9398bf022d6', //KLEO (KDAT)
     '0x84f8dc1ada73298281387e62616470f3dd5df2f6', //SIXGPT (SIX)
@@ -65,7 +65,7 @@ export const TOKEN_ALLOW_LIST: { [key: string]: string[] } = {
     '0x202f120c83dcfce04a1723ae7ec7cdbd2ed73302', //WWW
     '0x17ba7a5603fdd6f07a1da23c843e16e60987c7f7', // BOPS
     '0xad881d0f795b07daad6a23389d5ab8fc596c1eaf', // REM
-    '0x0D32E3B41E0Dbb17192b6b0d26Ef018d31f175b5', // GPT
+    '0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590', //WETH
   ],
   [SupportedNetwork.VANA_MOKSHA]: [
     '0xb39a50b5806039c82932bb96cefbcbc61231045c', // USDC
@@ -118,7 +118,7 @@ export const POOL_ALLOW_LIST: { [key: string]: string[] } = {
   [SupportedNetwork.VANA]: [
     '0x850e454ddebf9f61ef5a86a032c857e0e47c4fa9',
     '0xe21b165bcd93251b71db4a55e4e8f234b3391d74',
-    '0x39b01BcfB9C2B3B7cA88d298E84b67D5300243E3', //WETH-USDC.e
+    '0xBcbc57231b24b7993a8003c04B3e5C20321419EE', // GPT
     '0x443d994a345c95df081c3cc45320d8b099b9f50c', //KLEO (KDAT)
     '0x2c856dc8aae173be498471b948ea4eea1702afed', //SIXGPT (SIX)
     '0x710344a5c8d60959efde9da3e359b1a87872a766', //DFUSION (VFSN)
@@ -132,7 +132,7 @@ export const POOL_ALLOW_LIST: { [key: string]: string[] } = {
     '0xac51287b6cf7fe5bacbf4130406cce6e256b835b', // WWW
     '0xd71289724d6cf091fb2d64999e9384e75515b401', // BOPS
     '0x8f91a6dbcf37e7e8524603f1174feb073a1dd1f4', // REM
-    '0xBcbc57231b24b7993a8003c04B3e5C20321419EE', // GPT
+    '0x39b01BcfB9C2B3B7cA88d298E84b67D5300243E3', //WETH-USDC.e
   ],
   [SupportedNetwork.VANA_MOKSHA]: [],
 }
