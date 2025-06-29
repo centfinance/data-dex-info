@@ -50,7 +50,7 @@ export const TOKEN_ALLOW_LIST: { [key: string]: string[] } = {
   [SupportedNetwork.BASE]: [],
   [SupportedNetwork.VANA]: [
     '0xf1815bd50389c46847f0bda824ec8da914045d14', //USDC.e
-    '0x0D32E3B41E0Dbb17192b6b0d26Ef018d31f175b5', // GPT
+    '0x0d32e3b41e0dbb17192b6b0d26ef018d31f175b5', // GPT
     '0x00eddd9621fb08436d0331c149d1690909a5906d', //WVANA
     '0xf23e379b2fd945f8c0a4f410cb6ef9398bf022d6', //KLEO (KDAT)
     '0x84f8dc1ada73298281387e62616470f3dd5df2f6', //SIXGPT (SIX)
@@ -118,7 +118,7 @@ export const POOL_ALLOW_LIST: { [key: string]: string[] } = {
   [SupportedNetwork.VANA]: [
     '0x850e454ddebf9f61ef5a86a032c857e0e47c4fa9',
     '0xe21b165bcd93251b71db4a55e4e8f234b3391d74',
-    '0xBcbc57231b24b7993a8003c04B3e5C20321419EE', // GPT
+    '0xbcbc57231b24b7993a8003c04b3e5c20321419ee', // GPT
     '0x443d994a345c95df081c3cc45320d8b099b9f50c', //KLEO (KDAT)
     '0x2c856dc8aae173be498471b948ea4eea1702afed', //SIXGPT (SIX)
     '0x710344a5c8d60959efde9da3e359b1a87872a766', //DFUSION (VFSN)
