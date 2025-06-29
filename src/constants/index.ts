@@ -65,6 +65,7 @@ export const TOKEN_ALLOW_LIST: { [key: string]: string[] } = {
     '0x202f120c83dcfce04a1723ae7ec7cdbd2ed73302', //WWW
     '0x17ba7a5603fdd6f07a1da23c843e16e60987c7f7', // BOPS
     '0xad881d0f795b07daad6a23389d5ab8fc596c1eaf', // REM
+    '0x0D32E3B41E0Dbb17192b6b0d26Ef018d31f175b5', // GPT
   ],
   [SupportedNetwork.VANA_MOKSHA]: [
     '0xb39a50b5806039c82932bb96cefbcbc61231045c', // USDC
