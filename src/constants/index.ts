@@ -132,6 +132,7 @@ export const POOL_ALLOW_LIST: { [key: string]: string[] } = {
     '0xac51287b6cf7fe5bacbf4130406cce6e256b835b', // WWW
     '0xd71289724d6cf091fb2d64999e9384e75515b401', // BOPS
     '0x8f91a6dbcf37e7e8524603f1174feb073a1dd1f4', // REM
+    '0xBcbc57231b24b7993a8003c04B3e5C20321419EE', // GPT
   ],
   [SupportedNetwork.VANA_MOKSHA]: [],
 }
